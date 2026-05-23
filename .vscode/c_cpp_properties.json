@@ -1,0 +1,47 @@
+{
+    "configurations": [
+        {
+            "name": "ARM",
+            "includePath": [
+                "${workspaceRoot}/src",
+				"${workspaceRoot}/src/**",
+                "${workspaceRoot}/config",
+                "${workspaceRoot}/external/nRF5_SDK/components",
+                "${workspaceRoot}/external/nRF5_SDK/components/ble/**",
+                "${workspaceRoot}/external/nRF5_SDK/components/libraries/**",
+                "${workspaceRoot}/external/nRF5_SDK/components/softdevice/common",
+                "${workspaceRoot}/external/nRF5_SDK/components/softdevice/s132/**",
+                "${workspaceRoot}/external/nRF5_SDK/components/toolchain/cmsis/include",
+                "${workspaceRoot}/external/nRF5_SDK/modules/**",
+                "${workspaceRoot}/external/nRF5_SDK/integration/**",
+                "${workspaceRoot}/external/nRF5_SDK/external/**"
+            ],
+            "defines": [
+                "USE_APP_CONFIG=1",
+				"BOARD_CUSTOM",
+				"BSP_SIMPLE=1",
+				"FLOAT_ABI_HARD",
+				"NRF52",
+				"NRF52832_XXAA",
+				"NRF52_PAN_74",
+				"NRF_SD_BLE_API_VERSION=7",
+				"S132",
+				"SOFTDEVICE_PRESENT",
+				"SWI_DISABLE0",
+				"__HEAP_SIZE=0",
+				"__STACK_SIZE=8192",
+				"DEBUG=1",
+				"DEBUG_NRF_USER=1"
+            ],
+            "browse": {
+                "limitSymbolsToIncludedHeaders": true,
+                "databaseFilename": ""
+            },
+            "intelliSenseMode": "gcc-arm",
+            "compilerPath": "${ARM_GCC_HOME}\\bin\\arm-none-eabi-gcc.exe",
+            "cStandard": "c99",
+            "cppStandard": "c++98"
+        }
+    ],
+    "version": 4
+}

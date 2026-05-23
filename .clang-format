@@ -10,7 +10,7 @@ AlwaysBreakAfterReturnType: None
 AlwaysBreakAfterDefinitionReturnType: None
 PenaltyReturnTypeOnItsOwnLine: 1000
 
-ColumnLimit: 100
+ColumnLimit: 130
 BreakBeforeBraces: Mozilla
 SpaceBeforeParens: Never
 AllowShortEnumsOnASingleLine: false

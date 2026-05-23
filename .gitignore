@@ -191,3 +191,4 @@ build/
 *.pb.h
 
 .docker_build_timestamp
+proto/.pb-stamp

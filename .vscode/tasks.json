@@ -1,0 +1,108 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "options": {
+        "cwd": "${workspaceFolder}"
+    },
+    "tasks": [
+        {
+            "label": "Build nRF52 (Debug)",
+            "type": "process",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "windows": {
+                "command": "${env:ARM_BUILD_TOOLS_HOME}\\bin\\make.exe"
+            },
+            "command": "make",
+            "args": [
+                "-j",
+                "BUILD=debug",
+                "BOARD=nrf52832dk"
+            ],
+            "problemMatcher": [
+                "$gcc"
+            ]
+        },
+        {
+            "label": "Build nRF52 (Release)",
+            "type": "process",
+			"group": {
+                "kind": "build",
+                "isDefault": false
+            },
+            "windows": {
+                "command": "${env:ARM_BUILD_TOOLS_HOME}\\bin\\make.exe"
+            },
+            "command": "make",
+            "args": [
+                "-j",
+                "BUILD=release",
+                "BOARD=nrf52832dk"
+            ],
+            "problemMatcher": [
+                "$gcc"
+            ]
+        },
+        {
+            "label": "Build nRF52840 (Debug)",
+            "type": "process",
+            "group": {
+                "kind": "build",
+                "isDefault": false
+            },
+            "windows": {
+                "command": "${env:ARM_BUILD_TOOLS_HOME}\\bin\\make.exe"
+            },
+            "command": "make",
+            "args": [
+                "-j",
+                "BUILD=debug",
+                "BOARD=nrf52840dk"
+            ],
+            "problemMatcher": [
+                "$gcc"
+            ]
+        },
+        {
+            "label": "Build nRF52840 (Release)",
+            "type": "process",
+			"group": {
+                "kind": "build",
+                "isDefault": false
+            },
+            "windows": {
+                "command": "${env:ARM_BUILD_TOOLS_HOME}\\bin\\make.exe"
+            },
+            "command": "make",
+            "args": [
+                "-j",
+                "BUILD=release",
+                "BOARD=nrf52840dk"
+            ],
+            "problemMatcher": [
+                "$gcc"
+            ]
+        },
+        {
+            "label": "Clean",
+            "type": "process",
+			"group": {
+                "kind": "build",
+                "isDefault": false
+            },
+            "windows": {
+                "command": "${env:ARM_BUILD_TOOLS_HOME}\\bin\\make.exe"
+            },
+            "command": "make",
+            "args": [
+                "clean"
+            ],
+            "problemMatcher": [
+                "$gcc"
+            ]
+        }
+    ]
+}

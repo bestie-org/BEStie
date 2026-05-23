@@ -1,0 +1,104 @@
+{
+	// Use IntelliSense to learn about possible attributes.
+	// Hover to view descriptions of existing attributes.
+	// For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+	"version": "0.2.0",
+	"configurations": [
+		{
+			"name": "Debug nRF52",
+			"request": "launch",
+			"type": "cortex-debug",
+			"cwd": "${workspaceRoot}",
+			"executable": "${workspaceRoot}/build/nrf52832_xxaa.out",
+			"servertype": "jlink",
+			"device": "nRF52832_xxAA",
+			"interface": "swd",
+			"preLaunchTask": "Build nRF52 (Debug)",
+			"svdFile": "${workspaceRoot}/external/nRF5_SDK/modules/nrfx/mdk/nrf52.svd",
+			"runToEntryPoint": "main",
+			"rttConfig": {
+				"enabled": true,
+				"address": "auto",
+				"decoders": [
+					{
+						"label": "Channel 0",
+						"port": 0,
+						"type": "console"
+					}
+				]
+			}
+		},
+		{
+			"name": "Release nRF52",
+			"request": "launch",
+			"type": "cortex-debug",
+			"cwd": "${workspaceRoot}",
+			"executable": "${workspaceRoot}/build/nrf52832_xxaa.out",
+			"servertype": "jlink",
+			"device": "nRF52832_xxAA",
+			"interface": "swd",
+			"preLaunchTask": "Build nRF52 (Release)",
+			"svdFile": "${workspaceRoot}/external/nRF5_SDK/modules/nrfx/mdk/nrf52.svd",
+			"runToEntryPoint": "main",
+			"rttConfig": {
+				"enabled": true,
+				"address": "auto",
+				"decoders": [
+					{
+						"label": "Channel 0",
+						"port": 0,
+						"type": "console"
+					}
+				]
+			}
+		},
+		{
+			"name": "Debug nRF52840",
+			"request": "launch",
+			"type": "cortex-debug",
+			"cwd": "${workspaceRoot}",
+			"executable": "${workspaceRoot}/build/nrf52840_xxaa.out",
+			"servertype": "jlink",
+			"device": "nRF52840_xxAA",
+			"interface": "swd",
+			"preLaunchTask": "Build nRF52840 (Debug)",
+			"svdFile": "${workspaceRoot}/external/nRF5_SDK/modules/nrfx/mdk/nrf52840.svd",
+			"runToEntryPoint": "main",
+			"rttConfig": {
+				"enabled": true,
+				"address": "auto",
+				"decoders": [
+					{
+						"label": "Channel 0",
+						"port": 0,
+						"type": "console"
+					}
+				]
+			}
+		},
+		{
+			"name": "Release nRF52840",
+			"request": "launch",
+			"type": "cortex-debug",
+			"cwd": "${workspaceRoot}",
+			"executable": "${workspaceRoot}/build/nrf52840_xxaa.out",
+			"servertype": "jlink",
+			"device": "nRF52840_xxAA",
+			"interface": "swd",
+			"preLaunchTask": "Build nRF52840 (Release)",
+			"svdFile": "${workspaceRoot}/external/nRF5_SDK/modules/nrfx/mdk/nrf52840.svd",
+			"runToEntryPoint": "main",
+			"rttConfig": {
+				"enabled": true,
+				"address": "auto",
+				"decoders": [
+					{
+						"label": "Channel 0",
+						"port": 0,
+						"type": "console"
+					}
+				]
+			}
+		}
+	]
+}
