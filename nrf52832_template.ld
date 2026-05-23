@@ -5,13 +5,27 @@ GROUP(-lgcc -lc -lnosys)
 
 MEMORY
 {
-  /* Allow redefinition of FLASH and RAM start address and length by passing apropriate symbols to linker invocation */
-  FLASH (rx) : ORIGIN = BES_FLASH_ORIGIN_NRF52832, LENGTH = BES_FLASH_LENGTH_NRF52832
-  RAM (rwx) :  ORIGIN = BES_RAM_ORIGIN_NRF52832, LENGTH = BES_RAM_LENGTH_NRF52832
+  FLASH    (rx) : ORIGIN = 0x26000, LENGTH = 0x44000   /* 272 KB — code & rodata */
+  APP_DATA (rw) : ORIGIN = 0x6A000, LENGTH = 0xA000    /*  40 KB — DFU-protected zone */
+                                                       /*    0x6A000–0x6CFFF  free for custom data (12 KB) */
+                                                       /*    0x6D000–0x6EFFF  FDS  (12 KB) */
+                                                       /*    0x70000–0x73FFF  pstorage (16 KB) */
+  /* Note:
+	 40kb app_data region requires custom build of Adafruit bootloader with
+	 DFU_APP_DATA_RESERVED=10*4096
+  */
+
+  /* Allow redefinition of RAM start address and length by passing appropriate symbols to linker invocation */
+  RAM     (rwx) : ORIGIN = BES_RAM_ORIGIN_NRF52832, LENGTH = BES_RAM_LENGTH_NRF52832
 }
 
 SECTIONS
 {
+	/* Application data that survives DFU updates */
+	.app_data :
+	{
+	KEEP(*(.app_data))
+	} > APP_DATA
 }
 
 SECTIONS

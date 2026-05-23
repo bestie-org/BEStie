@@ -7,7 +7,6 @@
 #include "nrf_sdh_ble.h"
 #include "peer_manager.h"
 #include "peer_manager_handler.h"
-#include "uuid.h"
 
 #define NRF_LOG_MODULE_NAME ble_init
 #include "nrf_log.h"
@@ -24,13 +23,23 @@ static void ble_evt_handler(ble_evt_t const *p_ble_evt, void *p_context)
 {
 	ret_code_t err_code = NRF_SUCCESS;
 
+#if CFG_PM_HANDLER_SECURE_ON_CONNECT
+	// secure connection using peer manager
+	pm_handler_secure_on_connection(p_ble_evt);
+#endif
+
+#if CFG_PM_HANDLER_SECURE_ON_ERROR && !CFG_PM_HANDLER_SECURE_ON_CONNECT
+	// secure connection on access to protected characteristic
+	pm_handler_secure_on_error(p_ble_evt);
+#endif
+
 	switch(p_ble_evt->header.evt_id) {
 	case BLE_GAP_EVT_DISCONNECTED:
-		NRF_LOG_DEBUG("Disconnected.");
+		NRF_LOG_DEBUG("Disconnected. Handle 0x%02X", p_ble_evt->evt.gap_evt.conn_handle);
 		break;
 
 	case BLE_GAP_EVT_CONNECTED: {
-		NRF_LOG_DEBUG("Connected.");
+		NRF_LOG_DEBUG("Connected. Handle 0x%02X", p_ble_evt->evt.gap_evt.conn_handle);
 
 // request PHY update if application config demands it
 #if defined(CFG_BLE_PHY) && CFG_BLE_PHY != BLE_GAP_PHY_1MBPS
@@ -55,25 +64,21 @@ static void ble_evt_handler(ble_evt_t const *p_ble_evt, void *p_context)
 	} break;
 
 	case BLE_GAP_EVT_PHY_UPDATE: {
-		NRF_LOG_DEBUG("PHY update status:%d, RX:%d, TX:%d",
-					  p_ble_evt->evt.gap_evt.params.phy_update.status,
-					  p_ble_evt->evt.gap_evt.params.phy_update.rx_phy,
-					  p_ble_evt->evt.gap_evt.params.phy_update.tx_phy);
+		NRF_LOG_DEBUG("PHY update status:%d, RX:%d, TX:%d", p_ble_evt->evt.gap_evt.params.phy_update.status,
+					  p_ble_evt->evt.gap_evt.params.phy_update.rx_phy, p_ble_evt->evt.gap_evt.params.phy_update.tx_phy);
 	} break;
 
 	case BLE_GATTC_EVT_TIMEOUT:
 		// Disconnect on GATT Client timeout event.
 		NRF_LOG_DEBUG("GATT Client Timeout.");
-		err_code = sd_ble_gap_disconnect(p_ble_evt->evt.gattc_evt.conn_handle,
-										 BLE_HCI_REMOTE_USER_TERMINATED_CONNECTION);
+		err_code = sd_ble_gap_disconnect(p_ble_evt->evt.gattc_evt.conn_handle, BLE_HCI_REMOTE_USER_TERMINATED_CONNECTION);
 		APP_ERROR_CHECK(err_code);
 		break;
 
 	case BLE_GATTS_EVT_TIMEOUT:
 		// Disconnect on GATT Server timeout event.
 		NRF_LOG_DEBUG("GATT Server Timeout.");
-		err_code = sd_ble_gap_disconnect(p_ble_evt->evt.gatts_evt.conn_handle,
-										 BLE_HCI_REMOTE_USER_TERMINATED_CONNECTION);
+		err_code = sd_ble_gap_disconnect(p_ble_evt->evt.gatts_evt.conn_handle, BLE_HCI_REMOTE_USER_TERMINATED_CONNECTION);
 		APP_ERROR_CHECK(err_code);
 		break;
 
@@ -108,18 +113,16 @@ static void gap_params_init(void)
 
 	BLE_GAP_CONN_SEC_MODE_SET_OPEN(&sec_mode);
 
-	err_code = sd_ble_gap_device_name_set(&sec_mode, (const uint8_t *)CFG_DEVICE_NAME,
-										  strlen(CFG_DEVICE_NAME));
+	err_code = sd_ble_gap_device_name_set(&sec_mode, (const uint8_t *)CFG_DEVICE_NAME, strlen(CFG_DEVICE_NAME));
 	APP_ERROR_CHECK(err_code);
 
 	err_code = sd_ble_gap_appearance_set(CFG_DEVICE_APPEARANCE);
-    APP_ERROR_CHECK(err_code);
+	APP_ERROR_CHECK(err_code);
 
-	ble_gap_conn_params_t gap_conn_params = {
-		.min_conn_interval = MSEC_TO_UNITS(CFG_MIN_CONN_INTERVAL, UNIT_1_25_MS),
-		.max_conn_interval = MSEC_TO_UNITS(CFG_MAX_CONN_INTERVAL, UNIT_1_25_MS),
-		.slave_latency = CFG_SLAVE_LATENCY,
-		.conn_sup_timeout = MSEC_TO_UNITS(CFG_CONN_SUP_TIMEOUT, UNIT_10_MS)};
+	ble_gap_conn_params_t gap_conn_params = {.min_conn_interval = MSEC_TO_UNITS(CFG_MIN_CONN_INTERVAL, UNIT_1_25_MS),
+											 .max_conn_interval = MSEC_TO_UNITS(CFG_MAX_CONN_INTERVAL, UNIT_1_25_MS),
+											 .slave_latency = CFG_SLAVE_LATENCY,
+											 .conn_sup_timeout = MSEC_TO_UNITS(CFG_CONN_SUP_TIMEOUT, UNIT_10_MS)};
 
 	err_code = sd_ble_gap_ppcp_set(&gap_conn_params);
 	APP_ERROR_CHECK(err_code);
@@ -137,12 +140,11 @@ static void conn_params_init(void)
 
 	ret_code_t err_code;
 
-	ble_conn_params_init_t cp_init = {
-		.first_conn_params_update_delay = APP_TIMER_TICKS(CFG_CONN_PARAM_FIRST_UPDATE_DELAY),
-		.next_conn_params_update_delay = APP_TIMER_TICKS(CFG_CONN_PARAM_NEXT_UPDATE_DELAY),
-		.max_conn_params_update_count = CFG_CONN_PARAM_MAX_UPDATE_COUNT,
-		.start_on_notify_cccd_handle = BLE_GATT_HANDLE_INVALID,
-		.disconnect_on_fail = CFG_CONN_PARAM_DISCONNECT_ON_FAIL};
+	ble_conn_params_init_t cp_init = {.first_conn_params_update_delay = APP_TIMER_TICKS(CFG_CONN_PARAM_FIRST_UPDATE_DELAY),
+									  .next_conn_params_update_delay = APP_TIMER_TICKS(CFG_CONN_PARAM_NEXT_UPDATE_DELAY),
+									  .max_conn_params_update_count = CFG_CONN_PARAM_MAX_UPDATE_COUNT,
+									  .start_on_notify_cccd_handle = BLE_GATT_HANDLE_INVALID,
+									  .disconnect_on_fail = CFG_CONN_PARAM_DISCONNECT_ON_FAIL};
 	err_code = ble_conn_params_init(&cp_init);
 	APP_ERROR_CHECK(err_code);
 
@@ -151,6 +153,17 @@ static void conn_params_init(void)
 
 static void peer_manager_evt_handler(pm_evt_t const *p_evt)
 {
+	switch(p_evt->evt_id) {
+	case PM_EVT_CONN_SEC_CONFIG_REQ: {
+		// allow automatic re-pairing if peer lost bond information
+		pm_conn_sec_config_t config = {.allow_repairing = true};
+		pm_conn_sec_config_reply(p_evt->conn_handle, &config);
+		break;
+	}
+	default:
+		break;
+	}
+
 	pm_handler_on_pm_evt(p_evt);
 	pm_handler_flash_clean(p_evt);
 }
@@ -187,7 +200,7 @@ static void peer_manager_init(bool erase_bonds)
 	APP_ERROR_CHECK(err_code);
 }
 
-// initalize BLE platform
+// initialize BLE platform
 void ble_init(void)
 {
 	softdevice_init();
@@ -195,7 +208,6 @@ void ble_init(void)
 	gatt_init();
 	conn_params_init();
 	peer_manager_init(false);
-	uuid_init();
 }
 
 // return handle to nRF BLE GATT module

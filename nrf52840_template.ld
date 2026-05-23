@@ -5,13 +5,22 @@ GROUP(-lgcc -lc -lnosys)
 
 MEMORY
 {
-  /* Allow redefinition of FLASH and RAM start address and length by passing apropriate symbols to linker invocation */
-  FLASH (rx) : ORIGIN = BES_FLASH_ORIGIN_NRF52840, LENGTH = BES_FLASH_LENGTH_NRF52840
-  RAM (rwx) :  ORIGIN = BES_RAM_ORIGIN_NRF52840, LENGTH = BES_RAM_LENGTH_NRF52840
+  FLASH    (rx) : ORIGIN = 0x27000, LENGTH = 0xC3000   /* 780 KB — code & rodata */
+  APP_DATA (rw) : ORIGIN = 0xEA000, LENGTH = 0xA000    /*  40 KB — entire DFU-protected zone */
+                                                       /*    0xEA000–0xEBFFF  free for custom data (8 KB) */
+                                                       /*    0xEC000–0xEFFFF  FDS (3 pages, 12 KB) */
+                                                       /*    0xF0000–0xF3FFF  pstorage (4 pages, 16 KB) */
+  /* Allow redefinition of RAM start address and length by passing appropriate symbols to linker invocation */
+  RAM     (rwx) : ORIGIN = BES_RAM_ORIGIN_NRF52840, LENGTH = BES_RAM_LENGTH_NRF52840
 }
 
 SECTIONS
 {
+	/* Application data that survives DFU updates */
+	.app_data :
+	{
+	KEEP(*(.app_data))
+	} > APP_DATA
 }
 
 SECTIONS

@@ -1,5 +1,5 @@
 /**
- * BLE initalization routines
+ * BLE initialization routines
  *
  * */
 
@@ -8,7 +8,7 @@
 
 #include "nrf_ble_gatt.h"
 
-// initalize BLE platform
+// initialize BLE platform
 void ble_init(void);
 
 // return handle to nRF BLE GATT module

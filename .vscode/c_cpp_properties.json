@@ -5,7 +5,8 @@
             "includePath": [
                 "${workspaceRoot}/src",
 				"${workspaceRoot}/src/**",
-                "${workspaceRoot}/config",
+                "${workspaceRoot}/proto",
+				"${workspaceRoot}/external/nanopb",
                 "${workspaceRoot}/external/nRF5_SDK/components",
                 "${workspaceRoot}/external/nRF5_SDK/components/ble/**",
                 "${workspaceRoot}/external/nRF5_SDK/components/libraries/**",

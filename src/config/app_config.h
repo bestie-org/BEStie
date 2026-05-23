@@ -38,72 +38,24 @@
 //	<i>	Used in Advertising packets and device information service
 #define CFG_DEVICE_NAME "BEStie"
 
-/// <o> Device Apperance
+/// <o> Device Appearance
 //	<i>	Used in Advertising packets
-#define CFG_DEVICE_APPEARANCE BLE_APPEARANCE_GENERIC_CYCLING
+#define CFG_DEVICE_APPEARANCE BLE_APPEARANCE_CYCLING_CYCLING_COMPUTER
 
 /// <o> SIG Assigned Manufacturer ID to be used in Manufacturer specific data <0x0001-0xFFFE>
 #define CFG_COMPANY_IDENTIFIER 0xFFFE
-
-/// <o> Advertising interval in ms <20-10000>
-#define CFG_ADV_INTERVAL 1000
-
-/// <o> Advertising type
-//
-//  <0x01=> BLE_GAP_ADV_TYPE_CONNECTABLE_SCANNABLE_UNDIRECTED - Connectable and scannable undirected
-//  advertising events. <0x02=> BLE_GAP_ADV_TYPE_CONNECTABLE_NONSCANNABLE_DIRECTED_HIGH_DUTY_CYCLE -
-//  Connectable non-scannable directed advertising <0x03=>
-//  BLE_GAP_ADV_TYPE_CONNECTABLE_NONSCANNABLE_DIRECTED - Connectable non-scannable directed
-//  advertising <0x04=> BLE_GAP_ADV_TYPE_NONCONNECTABLE_SCANNABLE_UNDIRECTED - Non-connectable
-//  scannable undirected advertising <0x05=> BLE_GAP_ADV_TYPE_NONCONNECTABLE_NONSCANNABLE_UNDIRECTED
-//  - Non-connectable non-scannable undirected advertising <0x06=>
-//  BLE_GAP_ADV_TYPE_EXTENDED_CONNECTABLE_NONSCANNABLE_UNDIRECTED - Connectable non-scannable
-//  undirected advertising using extended advertising PDUs <0x07=>
-//  BLE_GAP_ADV_TYPE_EXTENDED_CONNECTABLE_NONSCANNABLE_DIRECTED - Connectable non-scannable directed
-//  advertising using extended advertising PDUs <0x08=>
-//  BLE_GAP_ADV_TYPE_EXTENDED_NONCONNECTABLE_SCANNABLE_UNDIRECTED - Non-connectable scannable
-//  undirected advertising using extended advertising PDUs <0x09=>
-//  BLE_GAP_ADV_TYPE_EXTENDED_NONCONNECTABLE_SCANNABLE_DIRECTED - Non-connectable scannable directed
-//  advertising using extended advertising PDUs <0x0A=>
-//  BLE_GAP_ADV_TYPE_EXTENDED_NONCONNECTABLE_NONSCANNABLE_UNDIRECTED - Non-connectable non-scannable
-//  advertising using extended advertising PDUs <0x0B=>
-//  BLE_GAP_ADV_TYPE_EXTENDED_NONCONNECTABLE_NONSCANNABLE_DIRECTED - Non-connectable non-scannable
-//  directed advertising using extended advertising PDUs
-#define CFG_ADV_TYPE 0x01
-
-/// <o> Advertising TX Power
-//	<i> Default: 0 dBm
-//	<i> Unless specificaly set otherwise connection inherits the same TX power
-//
-//	Note: This is only for Configuration Wizard dropdown
-//			use CFG_ADV_TX_POWER for actual settings
-//
-//	<44=> +4dBm
-//	<43=> +3dBm
-//	<40=> 0dBm
-//	<36=> -4dBm
-//	<32=> -8dBm
-//	<28=> -12dBm
-//	<24=> -16dBm
-//	<20=> -20dBm
-//	<0=> -40dBm
-#define CFG_ADV_TX_POWER_SET 40
-
-// actual value in dBm, Configuration Wizard desn't allow negative values in enums
-// us this in firmware settings
-#define CFG_ADV_TX_POWER (CFG_ADV_TX_POWER_SET - 40)
 
 /// <o> Minimum acceptable connection interval in ms <7-4000>
 #define CFG_MIN_CONN_INTERVAL 100
 
 /// <o> Maximum acceptable connection interval in ms <7-4000>
-#define CFG_MAX_CONN_INTERVAL 500
+#define CFG_MAX_CONN_INTERVAL 250
 
 /// <o> Slave latency in connection intervals <0-499>
-#define CFG_SLAVE_LATENCY 0
+#define CFG_SLAVE_LATENCY 3
 
 /// <o> Connection supervisory timeout in ms <100-32000>
-#define CFG_CONN_SUP_TIMEOUT 4000
+#define CFG_CONN_SUP_TIMEOUT 3000
 
 /// <o> BLE link PHY
 //	<i> Default: Auto
@@ -178,7 +130,7 @@
 #define CFG_PM_HANDLER_SECURE_ON_CONNECT 0
 
 /// <q> Start connection security when access to protected service is attempted
-#define CFG_PM_HANDLER_SECURE_ON_ERROR 1
+#define CFG_PM_HANDLER_SECURE_ON_ERROR 0
 
 // </h>
 
@@ -191,9 +143,41 @@
 
 // <o> Size of queued writes memory buffer in bytes <1-512>
 #define CFG_QWR_MEM_SIZE 128
+// </h>
 
 // </h>
 
+// <h> Misc application settings
+
+// <h> eBike state handlers
+
+/// <q> Enable Fitness Machine Service (indoor bike) support
+//  <i> This works best but some legacy devices do not support it
+//	<i> Default: 1
+#ifndef CFG_FTMS_ENABLED
+#define CFG_FTMS_ENABLED 1
+#endif
+
+/// <o> FTMS data update interval in ms <100->
+//	<i> Default: 1000
+#define CFG_FTMS_HANDLER_NOTIFICATION_TIMER_INTERVAL_MS 1000
+
+/// <q> Enable Cycling Power and Cycling speed and Cadence services
+//  <i> This a backup solution intended for legacy devices
+//	<i> Default: 0
+#ifndef CFG_CPMS_CSC_ENABLED
+#define CFG_CPMS_CSC_ENABLED 0
+#endif
+
+/// <o> CSC/CPMS data update interval in ms <100->
+//	<i> Default: 1000
+#define CSC_HANDLER_NOTIFICATION_TIMER_INTERVAL_MS 1000
+
+#if !(defined(CFG_FTMS_ENABLED) && CFG_FTMS_ENABLED) && !(defined(CFG_CPMS_CSC_ENABLED) && CFG_CPMS_CSC_ENABLED)
+#error "At least one data output service must be enabled. Check CFG_FTMS_ENABLED and CFG_CPMS_CSC_ENABLED"
+#endif
+
+// </h>
 // </h>
 
 #endif

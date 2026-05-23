@@ -1,6 +1,6 @@
 # ================================================
 #
-#   nRF5 SDK convinience wrapper
+#   nRF5 SDK convenience wrapper
 #
 # ================================================
 
@@ -45,7 +45,7 @@ else ifeq ($(BUILD),release)
 	COMMON_FLAGS += -DRELEASE=1 -DNRF_LOG_DEFAULT_LEVEL=3
 	CFLAGS += -O3
 
-# size minimalization mode settings
+# size minimization mode settings
 else ifeq ($(BUILD),size)
 	COMMON_FLAGS += -DRELEASE=1 -DNRF_LOG_DEFAULT_LEVEL=3
 	CFLAGS += -Os
@@ -110,13 +110,9 @@ ifeq ($(.DEFAULT_GOAL),nrf52832_xxaa)
 	# pass RAM and FLASH origin and size to linker script
 
 	# default values, update this each time softdevice version changes
-	BES_FLASH_ORIGIN_NRF52832 ?= 0x26000
-	BES_FLASH_LENGTH_NRF52832 ?= 0x5a000
 	BES_RAM_ORIGIN_NRF52832 ?= 0x20002260
 	BES_RAM_LENGTH_NRF52832 ?= 0xDDA0
 
-	LDFLAGS += -Wl,--defsym=BES_FLASH_ORIGIN_NRF52832=$(BES_FLASH_ORIGIN_NRF52832)
-	LDFLAGS += -Wl,--defsym=BES_FLASH_LENGTH_NRF52832=$(BES_FLASH_LENGTH_NRF52832)
 	LDFLAGS += -Wl,--defsym=BES_RAM_ORIGIN_NRF52832=$(BES_RAM_ORIGIN_NRF52832)
 	LDFLAGS += -Wl,--defsym=BES_RAM_LENGTH_NRF52832=$(BES_RAM_LENGTH_NRF52832)
 
@@ -147,13 +143,9 @@ else ifeq ($(.DEFAULT_GOAL),nrf52840_xxaa)
 
 	# pass RAM and FLASH origin and size to linker script
 
-	BES_FLASH_ORIGIN_NRF52840 ?= 0x27000
-	BES_FLASH_LENGTH_NRF52840 ?= 0xd9000
 	BES_RAM_ORIGIN_NRF52840 ?= 0x20002270
 	BES_RAM_LENGTH_NRF52840 ?= 0x3DD90
 
-	LDFLAGS += -Wl,--defsym=BES_FLASH_ORIGIN_NRF52840=$(BES_FLASH_ORIGIN_NRF52840)
-	LDFLAGS += -Wl,--defsym=BES_FLASH_LENGTH_NRF52840=$(BES_FLASH_LENGTH_NRF52840)
 	LDFLAGS += -Wl,--defsym=BES_RAM_ORIGIN_NRF52840=$(BES_RAM_ORIGIN_NRF52840)
 	LDFLAGS += -Wl,--defsym=BES_RAM_LENGTH_NRF52840=$(BES_RAM_LENGTH_NRF52840)
 
@@ -237,7 +229,7 @@ NRF_SDK_SRC_FILES := $(filter-out $(NRF_SDK_EXCLUDE_PATTERNS),$(NRF_SDK_SRC_FILE
 # autodetect project source and include directory list
 
 # search path for project source and includes
-PROJ_SEARCH_PATH:=$(PROJ_DIR)/proto/ $(PROJ_DIR)/src/ $(PROJ_DIR)/src/*/ $(PROJ_DIR)/config/
+PROJ_SEARCH_PATH:=$(PROJ_DIR)/proto/ $(PROJ_DIR)/src/ $(PROJ_DIR)/src/*/ $(PROJ_DIR)/src/*/*/
 
 # expand search path to list of directories
 PROJ_SRC_DIRS:=$(foreach dir,$(PROJ_SEARCH_PATH),$(sort $(dir $(wildcard $(dir)))))

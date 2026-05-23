@@ -1141,7 +1141,13 @@
 // <q> BLE_ADVERTISING_ENABLED  - ble_advertising - Advertising module
 
 #ifndef BLE_ADVERTISING_ENABLED
-#define BLE_ADVERTISING_ENABLED 1
+#define BLE_ADVERTISING_ENABLED 0
+#endif
+
+// <q> BLE_DB_DISCOVERY_ENABLED  - ble_db_discovery - Database discovery module
+
+#ifndef BLE_DB_DISCOVERY_ENABLED
+#define BLE_DB_DISCOVERY_ENABLED 1
 #endif
 
 // <q> BLE_DTM_ENABLED  - ble_dtm - Module for testing RF/PHY using DTM commands
@@ -1188,7 +1194,6 @@
 
 // <q> NRF_BLE_GATT_MTU_EXCHANGE_INITIATION_ENABLED  - Enable GATT MTU exchange initiation
 
-
 #ifndef NRF_BLE_GATT_MTU_EXCHANGE_INITIATION_ENABLED
 #define NRF_BLE_GATT_MTU_EXCHANGE_INITIATION_ENABLED 1
 #endif
@@ -1202,17 +1207,17 @@
 // <e> NRF_BLE_GQ_ENABLED - nrf_ble_gq - BLE GATT Queue Module
 //==========================================================
 #ifndef NRF_BLE_GQ_ENABLED
-#define NRF_BLE_GQ_ENABLED 0
+#define NRF_BLE_GQ_ENABLED 1
 #endif
 // <o> NRF_BLE_GQ_DATAPOOL_ELEMENT_SIZE - Default size of a single element in the pool of memory
 // objects.
 #ifndef NRF_BLE_GQ_DATAPOOL_ELEMENT_SIZE
-#define NRF_BLE_GQ_DATAPOOL_ELEMENT_SIZE 20
+#define NRF_BLE_GQ_DATAPOOL_ELEMENT_SIZE 32
 #endif
 
 // <o> NRF_BLE_GQ_DATAPOOL_ELEMENT_COUNT - Default number of elements in the pool of memory objects.
 #ifndef NRF_BLE_GQ_DATAPOOL_ELEMENT_COUNT
-#define NRF_BLE_GQ_DATAPOOL_ELEMENT_COUNT 8
+#define NRF_BLE_GQ_DATAPOOL_ELEMENT_COUNT 16
 #endif
 
 // <o> NRF_BLE_GQ_GATTC_WRITE_MAX_DATA_LEN - Maximal size of the data inside GATTC write request (in
@@ -1224,12 +1229,12 @@
 // <o> NRF_BLE_GQ_GATTS_HVX_MAX_DATA_LEN - Maximal size of the data inside GATTC notification or
 // indication request (in bytes).
 #ifndef NRF_BLE_GQ_GATTS_HVX_MAX_DATA_LEN
-#define NRF_BLE_GQ_GATTS_HVX_MAX_DATA_LEN 16
+#define NRF_BLE_GQ_GATTS_HVX_MAX_DATA_LEN 32
 #endif
 
 // <o> NRF_BLE_GQ_QUEUE_SIZE - Queue size for BLE GATT Queue module.
 #ifndef NRF_BLE_GQ_QUEUE_SIZE
-#define NRF_BLE_GQ_QUEUE_SIZE 4
+#define NRF_BLE_GQ_QUEUE_SIZE 8
 #endif
 
 // </e>
@@ -1339,7 +1344,7 @@
 // <i>  This might be necessary for interoperability reasons, especially as peripheral.
 
 #ifndef PM_HANDLER_SEC_DELAY_MS
-#define PM_HANDLER_SEC_DELAY_MS 20
+#define PM_HANDLER_SEC_DELAY_MS 4000
 #endif
 
 // </e>
@@ -5605,7 +5610,7 @@
 // <i> This option can be used when app_timer is used for timestamping.
 
 #ifndef APP_TIMER_KEEPS_RTC_ACTIVE
-#define APP_TIMER_KEEPS_RTC_ACTIVE 0
+#define APP_TIMER_KEEPS_RTC_ACTIVE 1
 #endif
 
 // <o> APP_TIMER_SAFE_WINDOW_MS - Maximum possible latency (in milliseconds) of handling app_timer
@@ -5795,8 +5800,7 @@
 // <i> Note: This value is not editable in Configuration Wizard.
 // <i> Comma-separated list of supported languages.
 #ifndef APP_USBD_STRINGS_LANGIDS
-#define APP_USBD_STRINGS_LANGIDS \
-	APP_USBD_LANG_AND_SUBLANG(APP_USBD_LANG_ENGLISH, APP_USBD_SUBLANG_ENGLISH_US)
+#define APP_USBD_STRINGS_LANGIDS APP_USBD_LANG_AND_SUBLANG(APP_USBD_LANG_ENGLISH, APP_USBD_SUBLANG_ENGLISH_US)
 #endif
 
 // <e> APP_USBD_STRING_ID_MANUFACTURER - Define manufacturer string ID.
@@ -6027,7 +6031,7 @@
 // can be used by other modules.
 
 #ifndef FDS_VIRTUAL_PAGES_RESERVED
-#define FDS_VIRTUAL_PAGES_RESERVED 0
+#define FDS_VIRTUAL_PAGES_RESERVED 4
 #endif
 
 // </h>
@@ -10819,7 +10823,7 @@
 // <i> Maximum number of total concurrent connections using the default configuration.
 
 #ifndef NRF_SDH_BLE_TOTAL_LINK_COUNT
-#define NRF_SDH_BLE_TOTAL_LINK_COUNT (NRF_SDH_BLE_CENTRAL_LINK_COUNT+NRF_SDH_BLE_PERIPHERAL_LINK_COUNT)
+#define NRF_SDH_BLE_TOTAL_LINK_COUNT 3
 #endif
 
 // <o> NRF_SDH_BLE_GAP_EVENT_LENGTH - GAP event length.

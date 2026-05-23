@@ -1,3 +1,4 @@
+#include "advertising.h"
 #include "app_scheduler.h"
 #include "app_util_platform.h"
 #include "ble_init.h"
@@ -6,9 +7,13 @@
 #include "nrf_log.h"
 #include "nrf_log_ctrl.h"
 #include "nrf_pwr_mgmt.h"
+#include "services.h"
 
 static void idle_task(void)
 {
+	// execute app_scheduler tasks
+	app_sched_execute();
+
 #if CFG_SEC_PARAM_LESC
 
 	// perform LESC key exchange if required
@@ -18,9 +23,6 @@ static void idle_task(void)
 	}
 
 #endif
-
-	// execute app_scheduler tasks
-	app_sched_execute();
 
 	// process log events
 	if(NRF_LOG_PROCESS() == false) {
@@ -33,6 +35,9 @@ int main(void)
 {
 	board_init();
 	ble_init();
+	services_init();
+	advertising_init();
+	APP_ERROR_CHECK(advertising_start());
 
 	NRF_LOG_DEBUG("Program start");
 
