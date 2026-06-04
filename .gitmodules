@@ -1,6 +1,6 @@
 [submodule "external/nRF5_SDK"]
 	path = external/nRF5_SDK
-	url = git@github.com:keton/nRF5_SDK.git
+	url = https://github.com/bestie-org/nRF5_SDK.git
 	branch = sdk_17.1.0
 [submodule "external/nanopb"]
 	path = external/nanopb
