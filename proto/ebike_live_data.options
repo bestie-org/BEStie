@@ -1,0 +1,6 @@
+com.bosch.ebike.LiveData.speed int_size:IS_16
+com.bosch.ebike.LiveData.cadence int_size:IS_16
+com.bosch.ebike.LiveData.rider_power int_size:IS_16
+com.bosch.ebike.LiveData.ambient_brightness int_size:IS_32
+com.bosch.ebike.LiveData.battery_soc int_size:IS_8
+com.bosch.ebike.LiveData.odometer int_size:IS_32

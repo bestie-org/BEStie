@@ -1,0 +1,36 @@
+{
+    "files.exclude": {
+        "**/*.ini": true,
+		"**/*.uvprojx": true,
+		"**/*.scvd": true,
+		"**/*.uvguix.*": true,
+		"**/*.uvoptx": true,
+		"JLinkLog.txt": true,
+		"RTE":true,
+		"Listings":true,
+        "Objects": true,
+    },
+    "[c]": {
+        "editor.insertSpaces": false,
+        "editor.tabSize": 4,
+        "editor.detectIndentation": false,
+        "editor.quickSuggestions": {
+            "other": false,
+            "comments": false,
+            "strings": false
+        }
+    },
+    "files.associations": {
+        "*.c": "c",
+        "*.h": "c"
+    },
+    "C_Cpp.intelliSenseEngine": "default",
+    "C_Cpp.autoAddFileAssociations": false,
+	"C_Cpp.autocomplete": "default",
+	"cortex-debug.armToolchainPath.windows": "${env:ARM_GCC_HOME}/bin",
+    "cortex-debug.JLinkGDBServerPath.windows": "${env:JLINK_HOME}/JLinkGDBServerCL.exe",
+	"cortex-debug.armToolchainPath.linux": "/usr/bin",
+	"cortex-debug.JLinkGDBServerPath.linux": "/usr/bin/JLinkGDBServerCLExe",
+    "C_Cpp.errorSquiggles": "enabled",
+    "makefile.configureOnOpen": false
+}

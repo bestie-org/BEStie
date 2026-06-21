@@ -185,3 +185,10 @@ $RECYCLE.BIN/
 *.gdbinit
 
 # End of https://www.gitignore.io/api/c,c++,keil,linux,windows,visualstudiocode
+
+build/
+*.pb.c
+*.pb.h
+
+.docker_build_timestamp
+proto/.pb-stamp
