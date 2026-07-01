@@ -107,6 +107,7 @@ static void on_ldi_c_discovery_complete(ble_ldi_c_t *const p_ble_ldi_c, const bl
 
 		ebike_state_reset();
 
+#if defined(CFG_SLAVE_LATENCY) && CFG_SLAVE_LATENCY > 0
 		// ebike connection needs zero slave latency so incoming LDI notification performance remains high
 		// our device is a peripheral in this connection and has to be awake to receive incoming data
 		// new connections always get default values set in sd_ble_gap_ppcp_set() on init
@@ -117,6 +118,7 @@ static void on_ldi_c_discovery_complete(ble_ldi_c_t *const p_ble_ldi_c, const bl
 
 		err_code = ble_conn_params_change_conn_params(p_evt->conn_handle, &ebike_conn_params);
 		APP_ERROR_CHECK(err_code);
+#endif
 
 		err_code = ble_ldi_c_handles_assign(p_ble_ldi_c, p_evt->conn_handle, &p_evt->params.peer_db);
 		APP_ERROR_CHECK(err_code);

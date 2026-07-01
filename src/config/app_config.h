@@ -52,7 +52,7 @@
 #define CFG_MAX_CONN_INTERVAL 250
 
 /// <o> Slave latency in connection intervals <0-499>
-#define CFG_SLAVE_LATENCY 3
+#define CFG_SLAVE_LATENCY 0
 
 /// <o> Connection supervisory timeout in ms <100-32000>
 #define CFG_CONN_SUP_TIMEOUT 3000
@@ -83,6 +83,17 @@
 
 /// <q> Should device disconnect if parameter update fails
 #define CFG_CONN_PARAM_DISCONNECT_ON_FAIL 0
+
+// </h>
+
+// <h> Connection troughput related settings
+
+/// <o> Number of notifications per link that can be queued on softdevice side (default 3)
+#define CFG_HVN_TX_QUEUE_SIZE 5
+
+/// <o> Allow connection event extension (default 0)
+// <i> This potentially increases troughput by allowing to send multiple packets per connection interval if there's free radio time
+#define CFG_CONN_EVT_EXT_ENABLED 1
 
 // </h>
 
