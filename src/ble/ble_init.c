@@ -41,6 +41,13 @@ static void ble_evt_handler(ble_evt_t const *p_ble_evt, void *p_context)
 	case BLE_GAP_EVT_CONNECTED: {
 		NRF_LOG_DEBUG("Connected. Handle 0x%02X", p_ble_evt->evt.gap_evt.conn_handle);
 
+		// by default nRF5 chips transmit at +0 dBm
+		// set TX power 2.5x stronger to brute force connection issues with bad antennas on some small nRF boards and fitness
+		// devices (Enduro 3 and Xiao BLE I'm looking at you!). This will slightly increase power consumption (~20%)
+		err_code = sd_ble_gap_tx_power_set(BLE_GAP_TX_POWER_ROLE_CONN, p_ble_evt->evt.gap_evt.conn_handle,
+										   RADIO_TXPOWER_TXPOWER_Pos4dBm);
+		APP_ERROR_CHECK(err_code);
+
 // request PHY update if application config demands it
 #if defined(CFG_BLE_PHY) && CFG_BLE_PHY != BLE_GAP_PHY_1MBPS
 		ble_gap_phys_t const phys = {
