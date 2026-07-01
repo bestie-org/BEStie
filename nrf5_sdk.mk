@@ -42,7 +42,7 @@ ifeq ($(BUILD),debug)
 
 # release mode settings
 else ifeq ($(BUILD),release)
-	COMMON_FLAGS += -DRELEASE=1 -DNRF_LOG_DEFAULT_LEVEL=3
+	COMMON_FLAGS += -DRELEASE=1 -DNRF_LOG_DEFAULT_LEVEL=3 -DNRF_LOG_ENABLED=0
 	CFLAGS += -O3
 
 # size minimization mode settings
