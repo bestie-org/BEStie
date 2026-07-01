@@ -63,7 +63,7 @@
 //	<0x00=> Automatically select highest supported PHY
 //	<0x01=> 1Mbps PHY
 //	<0x02=> 2Mbps PHY
-#define CFG_BLE_PHY 0x01
+#define CFG_BLE_PHY 0x00
 
 // </h>
 
