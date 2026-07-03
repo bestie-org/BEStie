@@ -92,7 +92,8 @@
 #define CFG_HVN_TX_QUEUE_SIZE 5
 
 /// <o> Allow connection event extension (default 0)
-// <i> This potentially increases troughput by allowing to send multiple packets per connection interval if there's free radio time
+// <i> This potentially increases troughput by allowing to send multiple packets per connection interval if there's free radio
+// time
 #define CFG_CONN_EVT_EXT_ENABLED 1
 
 // </h>
@@ -169,9 +170,14 @@
 #define CFG_FTMS_ENABLED 1
 #endif
 
-/// <o> FTMS data update interval in ms <100->
+/// <o> FTMS notification timer interval. This dictates how often it checks if sending more data == 0 notification is necessary
+/// <100->
+//	<i> Default: 250
+#define CFG_FTMS_HANDLER_NOTIFICATION_TIMER_INTERVAL_MS 250
+
+/// <o> How often to send FTMS notification with more data == 0 if there's no rider power or cadence updates.
 //	<i> Default: 1000
-#define CFG_FTMS_HANDLER_NOTIFICATION_TIMER_INTERVAL_MS 1000
+#define CFG_FTMS_HANDLER_IDLE_NOTIFICATION_INTERVAL_MS 1000
 
 /// <q> Enable Cycling Power and Cycling speed and Cadence services
 //  <i> This a backup solution intended for legacy devices
