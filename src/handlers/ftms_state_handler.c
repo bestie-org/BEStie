@@ -2,13 +2,20 @@
 #include "app_timer.h"
 #include "sdk_config.h"
 #include "services.h"
+#include "timestamp.h"
 
 #define NRF_LOG_MODULE_NAME ftms_h
 #include "nrf_log.h"
 NRF_LOG_MODULE_REGISTER();
 
+// FTMS notification timer interval. This dictates how often it checks if sending more data == 0 notification is necessary
 #ifndef CFG_FTMS_HANDLER_NOTIFICATION_TIMER_INTERVAL_MS
-#define CFG_FTMS_HANDLER_NOTIFICATION_TIMER_INTERVAL_MS 1000
+#define CFG_FTMS_HANDLER_NOTIFICATION_TIMER_INTERVAL_MS 250
+#endif
+
+// How often to send FTMS notification with more data == 0 if there's no rider power or cadence updates
+#ifndef CFG_FTMS_HANDLER_IDLE_NOTIFICATION_INTERVAL_MS
+#define CFG_FTMS_HANDLER_IDLE_NOTIFICATION_INTERVAL_MS 1000
 #endif
 
 APP_TIMER_DEF(ftms_notification_timer);
@@ -24,6 +31,8 @@ static uint32_t ftms_power_sample_count;
 static uint64_t ftms_cadence_sum;
 static uint32_t ftms_cadence_sample_count;
 
+static uint64_t ftms_update_timestamp_ms = 0;
+
 static void ftms_state_reset(void)
 {
 	ftms_cadence_updated = false;
@@ -33,6 +42,7 @@ static void ftms_state_reset(void)
 	ftms_power_sample_count = 0;
 	ftms_cadence_sum = 0;
 	ftms_cadence_sample_count = 0;
+	ftms_update_timestamp_ms = 0;
 }
 
 static void on_initial_data_read(const ebike_state_data_t *const p_ebike_state_data)
@@ -109,9 +119,16 @@ static void on_live_data_notification(const ebike_state_data_t *const p_ebike_st
 
 static void ftms_notification_timer_handler(void *p_ctx)
 {
+	uint64_t now = timestamp_get_ms();
 	ble_ftms_data_t ftms_data = {0};
 
 	const ble_ldi_t *const p_ebike_state = ebike_state_get();
+
+	// send more data = 0 only on power and cadence updates or every CFG_FTMS_HANDLER_IDLE_NOTIFICATION_INTERVAL_MS
+	if(!(ftms_cadence_updated || ftms_power_updated) &&
+	   ((now - ftms_update_timestamp_ms) < CFG_FTMS_HANDLER_IDLE_NOTIFICATION_INTERVAL_MS)) {
+		return;
+	}
 
 	// Including all fields in each 'more data == 0' notification - speed, power, cadence prevents data fields from going '--' on
 	// Garmin devices
@@ -157,6 +174,7 @@ static void ftms_notification_timer_handler(void *p_ctx)
 
 	ftms_power_updated = false;
 	ftms_cadence_updated = false;
+	ftms_update_timestamp_ms = now;
 }
 
 static void ftms_ebike_event_handler(const ebike_state_data_t *const p_ebike_state_data)

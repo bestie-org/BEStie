@@ -52,7 +52,7 @@
 #define CFG_MAX_CONN_INTERVAL 250
 
 /// <o> Slave latency in connection intervals <0-499>
-#define CFG_SLAVE_LATENCY 3
+#define CFG_SLAVE_LATENCY 0
 
 /// <o> Connection supervisory timeout in ms <100-32000>
 #define CFG_CONN_SUP_TIMEOUT 3000
@@ -63,7 +63,7 @@
 //	<0x00=> Automatically select highest supported PHY
 //	<0x01=> 1Mbps PHY
 //	<0x02=> 2Mbps PHY
-#define CFG_BLE_PHY 0x01
+#define CFG_BLE_PHY 0x00
 
 // </h>
 
@@ -83,6 +83,18 @@
 
 /// <q> Should device disconnect if parameter update fails
 #define CFG_CONN_PARAM_DISCONNECT_ON_FAIL 0
+
+// </h>
+
+// <h> Connection troughput related settings
+
+/// <o> Number of notifications per link that can be queued on softdevice side (default 3)
+#define CFG_HVN_TX_QUEUE_SIZE 5
+
+/// <o> Allow connection event extension (default 0)
+// <i> This potentially increases troughput by allowing to send multiple packets per connection interval if there's free radio
+// time
+#define CFG_CONN_EVT_EXT_ENABLED 1
 
 // </h>
 
@@ -158,9 +170,14 @@
 #define CFG_FTMS_ENABLED 1
 #endif
 
-/// <o> FTMS data update interval in ms <100->
+/// <o> FTMS notification timer interval. This dictates how often it checks if sending more data == 0 notification is necessary
+/// <100->
+//	<i> Default: 250
+#define CFG_FTMS_HANDLER_NOTIFICATION_TIMER_INTERVAL_MS 250
+
+/// <o> How often to send FTMS notification with more data == 0 if there's no rider power or cadence updates.
 //	<i> Default: 1000
-#define CFG_FTMS_HANDLER_NOTIFICATION_TIMER_INTERVAL_MS 1000
+#define CFG_FTMS_HANDLER_IDLE_NOTIFICATION_INTERVAL_MS 1000
 
 /// <q> Enable Cycling Power and Cycling speed and Cadence services
 //  <i> This a backup solution intended for legacy devices

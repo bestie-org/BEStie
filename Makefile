@@ -17,11 +17,11 @@ NRF_SDK_MODULES:=common util delay segger_rtt log log/src memobj strerror fprint
 NRF_SDK_INCLUDE_ONLY_MODULES:=crypto/backend/micro_ecc crypto/backend/cc310 crypto/backend/cifra crypto/backend/nrf_sw \
 								crypto/backend/cc310_bl crypto/backend/mbedtls crypto/backend/optiga nrf_oberon/include nrf_cc310/include
 
-BES_RAM_ORIGIN_NRF52832 := 0x20004A08
-BES_RAM_LENGTH_NRF52832 := 0xB5F8
+BES_RAM_ORIGIN_NRF52832 := 0x200055D8
+BES_RAM_LENGTH_NRF52832 := 0xAA28
 
-BES_RAM_ORIGIN_NRF52840 := 0x20004A18
-BES_RAM_LENGTH_NRF52840 := 0x3B5E8
+BES_RAM_ORIGIN_NRF52840 := 0x200055E8
+BES_RAM_LENGTH_NRF52840 := 0x3AA18
 
 include protobuf.mk
 include nrf5_sdk.mk

@@ -41,6 +41,13 @@ static void ble_evt_handler(ble_evt_t const *p_ble_evt, void *p_context)
 	case BLE_GAP_EVT_CONNECTED: {
 		NRF_LOG_DEBUG("Connected. Handle 0x%02X", p_ble_evt->evt.gap_evt.conn_handle);
 
+		// by default nRF5 chips transmit at +0 dBm
+		// set TX power 2.5x stronger to brute force connection issues with bad antennas on some small nRF boards and fitness
+		// devices (Enduro 3 and Xiao BLE I'm looking at you!). This will slightly increase power consumption (~20%)
+		err_code = sd_ble_gap_tx_power_set(BLE_GAP_TX_POWER_ROLE_CONN, p_ble_evt->evt.gap_evt.conn_handle,
+										   RADIO_TXPOWER_TXPOWER_Pos4dBm);
+		APP_ERROR_CHECK(err_code);
+
 // request PHY update if application config demands it
 #if defined(CFG_BLE_PHY) && CFG_BLE_PHY != BLE_GAP_PHY_1MBPS
 		ble_gap_phys_t const phys = {
@@ -101,6 +108,15 @@ static void softdevice_init(void)
 	err_code = nrf_sdh_ble_default_cfg_set(CFG_BLE_CONN_CFG_TAG, &ram_start);
 	APP_ERROR_CHECK(err_code);
 
+	// allocate larger notification queues on softdevice side
+	ble_cfg_t ble_cfg = {.conn_cfg = {
+							 .conn_cfg_tag = CFG_BLE_CONN_CFG_TAG,
+							 .params.gatts_conn_cfg.hvn_tx_queue_size = CFG_HVN_TX_QUEUE_SIZE,
+						 }};
+
+	err_code = sd_ble_cfg_set(BLE_CONN_CFG_GATTS, &ble_cfg, ram_start);
+	APP_ERROR_CHECK(err_code);
+
 	// Enable BLE stack.
 	err_code = nrf_sdh_ble_enable(&ram_start);
 	APP_ERROR_CHECK(err_code);
@@ -131,6 +147,14 @@ static void gap_params_init(void)
 static void gatt_init(void)
 {
 	ret_code_t err_code = nrf_ble_gatt_init(&m_gatt, NULL);
+	APP_ERROR_CHECK(err_code);
+
+	// allow softdevice to send extra packets if there's time left inside connection interval
+	ble_opt_t opt = {
+		.common_opt.conn_evt_ext.enable = CFG_CONN_EVT_EXT_ENABLED,
+	};
+
+	err_code = sd_ble_opt_set(BLE_COMMON_OPT_CONN_EVT_EXT, &opt);
 	APP_ERROR_CHECK(err_code);
 }
 
