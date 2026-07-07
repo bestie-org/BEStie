@@ -4,7 +4,7 @@
 #
 # ================================================
 
-TARGETS          := nrf52832_xxaa nrf52840_xxaa
+TARGETS          := bestie_nrf52832 bestie_nrf52840
 OUTPUT_DIRECTORY ?= build
 
 # build and board selection handling
@@ -66,14 +66,16 @@ ifeq ($(BOARD),nrf52832dk)
 	COMMON_FLAGS += -DBES_BOARD_NRF52_DK=1
 
 	# set MCU
-	.DEFAULT_GOAL := nrf52832_xxaa
+	.DEFAULT_GOAL := bestie_nrf52832
+	.MCU:=nrf52832
 
 # nrf52840dk
 else ifeq ($(BOARD),nrf52840dk)
 	COMMON_FLAGS += -DBES_BOARD_NRF52840_DK=1
 
 	# set MCU
-	.DEFAULT_GOAL := nrf52840_xxaa
+	.DEFAULT_GOAL := bestie_nrf52840
+	.MCU:=nrf52840
 
 # unknown board
 else
@@ -81,7 +83,7 @@ else
 endif
 
 # nRF52832 specific settings
-ifeq ($(.DEFAULT_GOAL),nrf52832_xxaa)
+ifeq ($(.MCU),nrf52832)
 	LIB_FILES += $(NRF_SDK_ROOT)/external/nrf_oberon/lib/cortex-m4/hard-float/liboberon_3.0.8.a
 	SRC_FILES  += $(NRF_SDK_ROOT)/modules/nrfx/mdk/system_nrf52.c $(NRF_SDK_ROOT)/modules/nrfx/mdk/gcc_startup_nrf52.S
 
@@ -117,7 +119,7 @@ ifeq ($(.DEFAULT_GOAL),nrf52832_xxaa)
 	LDFLAGS += -Wl,--defsym=BES_RAM_LENGTH_NRF52832=$(BES_RAM_LENGTH_NRF52832)
 
 # nRF52840 specific settings
-else ifeq ($(.DEFAULT_GOAL),nrf52840_xxaa)
+else ifeq ($(.MCU),nrf52840)
 	LIB_FILES += $(NRF_SDK_ROOT)/external/nrf_oberon/lib/cortex-m4/hard-float/liboberon_3.0.8.a
 	SRC_FILES  += $(NRF_SDK_ROOT)/modules/nrfx/mdk/system_nrf52840.c $(NRF_SDK_ROOT)/modules/nrfx/mdk/gcc_startup_nrf52840.S
 
