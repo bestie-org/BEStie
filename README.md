@@ -1,8 +1,10 @@
 <h1> BEStie: bridge between Bosch Electric System (BES) bikes and fitness tracking gear.</h1>
 
-Stream cycling performance metrics straight to your watch or cycling computer in real time.
+<div align="center">
+  <img width="500" alt="BEStie in action" src="https://github.com/user-attachments/assets/7b57be8b-d07e-4baf-ab5b-b62df10c717c" />
+</div>
 
-If your existing fitness gear can work with smart trainer over BLE it will work with BEStie.
+Stream cycling performance metrics straight to your watch or cycling computer in real time. If your existing fitness gear can work with smart trainer over BLE it will work with BEStie.
 
 ## A bit of context (the problem)
 
@@ -276,7 +278,11 @@ The exact process will vary depending on your device. On Garmin Edge Explore 2 a
 
 	Sadly not faster than where it is now. I've squeezed every bit of latency on BEStie's side that was possible to eliminate while keeping power usage low.
 
-	Latency in this case is complicated:
+    <div align="center">
+      <video src="https://github.com/user-attachments/assets/d3b7a0fc-1c93-461f-851e-9b81835ae51c" width="640" controls></video>
+    </div>
+
+   Latency in this case is complicated:
 	* BLE protocol works in discrete time quants. 
   		
 		That means there are specific time windows when each device is allowed to send/receive over radio. BEStie is a BLE peripheral meaning it has no say how many radio windows per second it gets. BLE central devices - bike, head unit, smart watch dictate connection parameters and send 'data transfer possible now' packets. <br> BEStie provides a set of parameters that can be ignored by the central. If BEStie's configuration is respected communication happens every 100-200ms
@@ -299,7 +305,7 @@ The exact process will vary depending on your device. On Garmin Edge Explore 2 a
 
 		This puts lower latency limit at 1.4s (1s for data field update + 2 radio windows).
 
-6. __I've compared recordings from Flow app against BEStie in tool like [Compare the watts](https://compare-the-watts.com/) or [Quantified Self](https://quantified-self.io) and it shows bad data correlation/quality. Why do you claim BEStie gives good quality data?__
+7. __I've compared recordings from Flow app against BEStie in tool like [Compare the watts](https://compare-the-watts.com/) or [Quantified Self](https://quantified-self.io) and it shows bad data correlation/quality. Why do you claim BEStie gives good quality data?__
 
 	Existing tools assume single radio hop between sensor and recording device. This fundamentally impacts results. In single hop scenario samples are in sync relatively to each other. This means that once you find a match on small portion of the data there's a constant time offset between recording devices.
 
@@ -313,7 +319,7 @@ The exact process will vary depending on your device. On Garmin Edge Explore 2 a
 
 	If you still don't trust it I've created [a set of scripts](https://github.com/bestie-org/fit-align) that you can feed with your `*.fit` files and see the matched data, graphs and correlation values yourself.
 
-7. __Can you add battery range tracking, assist mode indicator, < insert a feature here > ?__
+8. __Can you add battery range tracking, assist mode indicator, < insert a feature here > ?__
 
 	Not today. BEStie is a Bosch Live Data Interface (LDI) peer. Spec is [here](proto/20260501_LiveDataInterface_V1_28042026.pdf). If by some miracle you can pass feedback about missing features to relevant team at Bosch that would be greatly appreciated by the whole community. And it would help everyone implementing LDI spec.
 	
