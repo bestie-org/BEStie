@@ -206,6 +206,10 @@ It's best to power cycle BEStie board before adding new bike. All old pairings w
 
 Pairing mode draws 90 µA vs 60 µA in normal advertising. After a power cycle, BEStie stays in pairing mode until it reconnects to a paired bike. To switch back to normal advertising, turn on a paired bike for at least 60 seconds.
 
+<div align="center">
+  <video src="https://github.com/user-attachments/assets/10be3567-08a9-4f4b-857e-d38123ba41cc" width="640" controls></video>
+</div>
+
 1. make sure BEStie firmware is installed and can be found by nRF Connect scan
 2. bring BEStie, bike and phone with Flow app close together, about arms reach would be best. 
 3. Optimally do the pairing away from other fitness devices like HR straps or cycling sensors. Flow app scans for and tries to connect to each device in random order. Often it gives up just after single try/device.
@@ -220,9 +224,16 @@ Pairing mode draws 90 µA vs 60 µA in normal advertising. After a power cycle, 
 	- single scan can take up to 2 minutes. Be patient and let it run till Flow app gives up. Repeat scanning 2-3 times before rebooting anything.
 	- If it fails check if you see BEStie on nRF Connect scan. If yes the firmware is working. Keep trying, phone reboot may help.
 9. Eventually new device named 'BEStie' will appear looking like a cycling computer. Click 'Connect'.
-10. Go to component list again, tap BEStie. Wait for connection dot to go green. It confirms that the bike is fully bonded now. That can take up to 90s on the first try. Once devices exchange security keys connections will happen much quicker and everything will automatically reconnect in the background.    
+10. Go to component list again, tap BEStie. Wait for connection dot to go green. It confirms that the bike is fully bonded now. That can take up to 90s on the first try. Once devices exchange security keys connections will happen much quicker and everything will automatically reconnect in the background.
+	<div align="center">
+    	<img width="500" alt="this is how connected device looks like" src="https://github.com/user-attachments/assets/010bc9d5-3270-4eed-ad33-50a3c00382ee" />
+	</div>
 
 ## Connecting BEStie to cycling computer / smart watch
+
+<div align="center">
+  <video src="https://github.com/user-attachments/assets/35f18573-002e-4d13-82c6-0c13134a58eb" width="640" controls></video>
+</div>
 
 The exact process will vary depending on your device. On Garmin Edge Explore 2 and Enduro 3 the process looks as follows:
 1. It's best to pair with the bike first and connect it with BEStie. Once ebike connection is established BLE advertising switches to focused FTMS advertising. <br> If you can't do it in this order scanning time will be longer and some devices might need more than one attempt. Keep trying.
@@ -233,6 +244,11 @@ The exact process will vary depending on your device. On Garmin Edge Explore 2 a
 5. 'Connecting to new device' screen will appear. This can take a long while on older devices like Edge Explore 2. Go grab a coffee and let it complete.
 6. Check list of sensors. BEStie should be there as a smart trainer device.
 7. Do a test 'ride'
+
+	<div align="center">
+		<video src="https://github.com/user-attachments/assets/7eea4aee-39db-48ad-ab9e-7a87e6a05aef" width="640" controls></video>
+	</div>
+	  
 	- make sure you have instantaneous speed and cadence values added to your data screens
 	- turn off your fitness device and the bike to force everything to disconnect. Keep BEStie on.
 	- turn on your fitness device, start an activity. Look at speed and cadence fields. They should show '--' and after 30-60s 'trainer connected' message should appear followed by a beep.
