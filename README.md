@@ -173,6 +173,10 @@ Otherwise time to update the bootloader:
 
 In case of doing bootloader update you can proceed regardless.
 
+<div align="center">
+	<video src="https://github.com/user-attachments/assets/885ea862-84bc-48cb-891e-cf43fd68cbda" width="640" controls></video>
+</div>
+
 1. Get BEStie firmware .hex from [release page](https://github.com/bestie-org/BEStie/releases/latest). File should be named `bestie_nrf52840.hex`
 2. Verify that the board is still in bootloader mode (there's a USB drive with `INFO_UF2.TXT` file as described above). Bootloader access times out after few minutes of inactivity
 3. Go to [BEStie firmware uploader](https://bestie-org.github.io/adafruit-uploader/) page. You'll need a browser that supports WebSerial API (Chromium or recent release of Firefox)
