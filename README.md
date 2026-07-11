@@ -195,7 +195,10 @@ In case of doing bootloader update you can proceed regardless.
 	* [Android](https://play.google.com/store/apps/details?id=no.nordicsemi.android.mcp&hl=en)
 	* [iOS](https://apps.apple.com/us/app/nrf-connect-for-mobile/id1054362403)
 3. Scan for devices. There should be one named 'BEStie'. You can filter by name. Tap the icon next to the name so red star appears and you can find it later by selecting 'show preferred devices' in filter menu.
-4. try connecting to it if you like. 
+   <div align="center">
+     <video src="https://github.com/user-attachments/assets/0d449880-54e3-4b62-ae2e-5b4577e9851f" width="640" controls></video>
+   </div>
+5. try connecting to it if you like. 
 
 	There will be 'Fitness Machine' service inside. 
 	
