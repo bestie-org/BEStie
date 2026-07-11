@@ -18,7 +18,7 @@ However the way LDI peer device must be implemented makes **adoption into existi
 
 ## Solution - use a translator
 
-This is where BEStie comes in. A protocol translator firmware based on cheap and widely available boards with on Nordic nRF5x MCUs.
+This is where BEStie comes in. A protocol translator firmware based on cheap and widely available boards with Nordic nRF5x MCUs.
 
 - On one end **spec compliant Live Data Interface peer**. Just open Flow app and click 'add component'. New 'bike display' named 'BEStie' will appear. Connect. Done.
 
