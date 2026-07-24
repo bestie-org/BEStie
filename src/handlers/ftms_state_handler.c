@@ -25,11 +25,11 @@ static bool ftms_power_updated = false;
 
 static uint32_t initial_odometer = 0;
 
-static uint64_t ftms_power_sum;
-static uint32_t ftms_power_sample_count;
+static uint64_t ftms_power_sum = 0;
+static uint32_t ftms_power_sample_count = 0;
 
-static uint64_t ftms_cadence_sum;
-static uint32_t ftms_cadence_sample_count;
+static uint64_t ftms_cadence_sum = 0;
+static uint32_t ftms_cadence_sample_count = 0;
 
 static uint64_t ftms_update_timestamp_ms = 0;
 
