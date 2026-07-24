@@ -74,6 +74,9 @@ BLE_FTMS_DEF(ftms_inst);
 
 #endif // #if defined(CFG_FTMS_ENABLED) && CFG_FTMS_ENABLED
 
+SERVICE_GQ_DEF(bas_gatt_queue_inst, 1, BLE_BAS_MAX_BATTERY_LEVEL_DATA_LEN);
+BLE_BAS_DEF(bas_inst);
+
 static void ble_evt_handler(ble_evt_t const *p_ble_evt, void *p_context);
 NRF_SDH_BLE_OBSERVER(ble_observer_inst, CFG_BLE_OBSERVER_PRIO, ble_evt_handler, NULL);
 
@@ -194,6 +197,21 @@ ble_ftms_t *services_ftms_inst_get(void)
 
 #endif // #if defined(CFG_FTMS_ENABLED) && CFG_FTMS_ENABLED
 
+static void bas_init(void)
+{
+	ret_code_t err_code;
+	ble_bas_init_t bas_init = {
+		.battery_level_cccd_access = SEC_OPEN, .battery_level_read_access = SEC_OPEN, .p_gatt_queue = &bas_gatt_queue_inst};
+
+	err_code = ble_bas_init(&bas_inst, &bas_init);
+	APP_ERROR_CHECK(err_code);
+}
+
+ble_bas_t *services_bas_inst_get(void)
+{
+	return &bas_inst;
+}
+
 void services_init(void)
 {
 #if defined(CFG_CPMS_CSC_ENABLED) && CFG_CPMS_CSC_ENABLED
@@ -206,6 +224,8 @@ void services_init(void)
 	ftms_init();
 	ftms_state_handler_init();
 #endif
+
+	bas_init();
 
 	ebike_advertising_state_handler_init();
 
