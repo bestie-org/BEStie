@@ -1,4 +1,5 @@
 #include "services.h"
+#include "battery_state_handler.h"
 #include "ble_conn_params.h"
 #include "ble_cpms.h"
 #include "ble_csc.h"
@@ -226,6 +227,7 @@ void services_init(void)
 #endif
 
 	bas_init();
+	battery_state_handler_init();
 
 	ebike_advertising_state_handler_init();
 

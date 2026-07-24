@@ -190,6 +190,10 @@
 //	<i> Default: 1000
 #define CSC_HANDLER_NOTIFICATION_TIMER_INTERVAL_MS 1000
 
+/// <o> Battery measurement interval in ms <1000->
+//	<i> Default: (2*60*1000)
+#define CFG_BATTERY_MEASUREMENT_TIMER_INTERVAL_MS (2 * 60 * 1000)
+
 #if !(defined(CFG_FTMS_ENABLED) && CFG_FTMS_ENABLED) && !(defined(CFG_CPMS_CSC_ENABLED) && CFG_CPMS_CSC_ENABLED)
 #error "At least one data output service must be enabled. Check CFG_FTMS_ENABLED and CFG_CPMS_CSC_ENABLED"
 #endif
