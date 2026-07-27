@@ -36,7 +36,7 @@ static float battery_level_average = 0.0f;
 static bool battery_level_average_initalized = false;
 static uint32_t samples_since_last_calibration = 0;
 
-// exponential moving average. Power draw is low but extemally noisy. Some samples will hit high current draw windows.
+// exponential moving average. Power draw is low but extremely noisy. Some samples will hit high current draw windows.
 static float average_battery_level(const float battery_level)
 {
 	if(!battery_level_average_initalized) {

@@ -26,7 +26,7 @@ static void bsp_saadc_init(void)
 	err_code = nrfx_saadc_init(NRFX_SAADC_CONFIG_IRQ_PRIORITY);
 	APP_ERROR_CHECK(err_code);
 
-	// Xaio and Feather have 1M/1M divider = ~500k source impedance, default 10us TACQ is too short
+	// Xiao and Feather have 1M/1M divider = ~500k source impedance, default 10us TACQ is too short
 	saadc_battery_channel.channel_config.acq_time = NRF_SAADC_ACQTIME_40US;
 
 	err_code = nrfx_saadc_channels_config(&saadc_battery_channel, 1);

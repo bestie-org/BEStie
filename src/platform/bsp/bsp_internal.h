@@ -1,7 +1,7 @@
 #ifndef __BSP_INTERNAL_H__
 #define __BSP_INTERNAL_H__
 
-// including nrf_gpio.h for respecitve macro results in circular dependency
+// including nrf_gpio.h for respective macro results in circular dependency
 #define BSP_GPIO_PIN_MAP(port, pin) (((port) << 5) | ((pin) & 0x1F))
 
 // include selected board variant header
