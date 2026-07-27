@@ -80,7 +80,7 @@ I hate to ask but if you like the project please consider leaving a GitHub star 
 
 There's no hard platform dependencies. Any board equipped with Nordic nRF52832 or nRF52840 will work. Adding other nRF52 family chips is also possible.
 
-Specific supported board will be needed if you want to track BEStie's battery levels (coming soon, stay tuned). Generic version that works on any nRF52832 or nRF52840 will be always available alongside it.
+Specific supported board is be needed if you want to track BEStie's battery levels. There's a generic firmware that assumes the board is directly powered from unregulated source (coin cell)
 
 So far following boards were tested:
 
@@ -177,7 +177,14 @@ In case of doing bootloader update you can proceed regardless.
 	<video src="https://github.com/user-attachments/assets/885ea862-84bc-48cb-891e-cf43fd68cbda" width="640" controls></video>
 </div>
 
-1. Get BEStie firmware .hex from [release page](https://github.com/bestie-org/BEStie/releases/latest). File should be named `bestie_nrf52840.hex`
+1. Get BEStie firmware .hex from [release page](https://github.com/bestie-org/BEStie/releases/latest). 
+   File should be named as follows:
+   | Board | Firmware file |
+   |-------|-------|
+   | nRF52-DK / generic nRF52832 board powered from coin cell| `bestie_nrf52832_generic.hex` |
+   | nRF52840-DK / generic nRF52840 board powered from coin cell| `bestie_nrf52840_generic.hex` |
+   | Adafruit Feather family (Express, Sense, BLE) | `bestie_nrf52840_feather.hex` |
+   | Seed Studio Xiao family (BLE, BLE Sense) | `bestie_nrf52840_xiao.hex` |
 2. Verify that the board is still in bootloader mode (there's a USB drive with `INFO_UF2.TXT` file as described above). Bootloader access times out after few minutes of inactivity
 3. Go to [BEStie firmware uploader](https://bestie-org.github.io/adafruit-uploader/) page. You'll need a browser that supports WebSerial API (Chromium or recent release of Firefox)
 4. Click 'Connect Serial' button. 
