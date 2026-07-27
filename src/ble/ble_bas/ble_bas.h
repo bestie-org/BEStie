@@ -12,7 +12,6 @@
 
 #include "app_error.h"
 #include "ble.h"
-#include "ble_sensor_location.h"
 #include "ble_srv_common.h"
 #include "nrf_ble_gq.h"
 #include "nrf_sdh_ble.h"

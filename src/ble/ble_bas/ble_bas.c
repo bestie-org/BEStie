@@ -5,10 +5,6 @@
 #include "nrf_log.h"
 NRF_LOG_MODULE_REGISTER();
 
-// Battery flags
-#define BLE_BAS_MEAS_FLAG_WHEEL_REVOLUTION_DATA_PRESENT (1 << 0)
-#define BLE_BAS_MEAS_FLAG_CRANK_REVOLUTION_DATA_PRESENT (1 << 1)
-
 static ret_code_t is_battery_level_notification_enabled(const ble_bas_t *const p_bas, const uint16_t conn_handle,
 														bool *p_notification_enabled)
 {
@@ -32,7 +28,7 @@ static ret_code_t is_battery_level_notification_enabled(const ble_bas_t *const p
 		*p_notification_enabled = ble_srv_is_notification_enabled(cccd_value_buf);
 
 		if(*p_notification_enabled) {
-			NRF_LOG_DEBUG("measurement_notification enabled on conn_handle 0x%02X", conn_handle);
+			NRF_LOG_DEBUG("battery level notification enabled on conn_handle 0x%02X", conn_handle);
 		}
 	}
 	if(err_code == BLE_ERROR_GATTS_SYS_ATTR_MISSING) {
