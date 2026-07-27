@@ -234,6 +234,7 @@ ret_code_t ble_ftms_measurement_update(ble_ftms_t *const p_ftms, const ble_ftms_
 	ASSERT(p_data);
 
 	ret_code_t err_code;
+	bool no_mem_occurred = false;
 
 	if(!p_data->instantaneous_speed_present && !p_data->instantaneous_cadence_present && !p_data->average_cadence_present &&
 	   !p_data->total_distance_present && !p_data->instantaneous_power_present && !p_data->average_power_present) {
@@ -271,16 +272,30 @@ ret_code_t ble_ftms_measurement_update(ble_ftms_t *const p_ftms, const ble_ftms_
 		gq_req.params.gatts_hvx.p_len = &len_buff[conn_handle];
 		err_code = nrf_ble_gq_item_add(p_ftms->p_gatt_queue, &gq_req, conn_handle);
 
-		if(err_code != NRF_SUCCESS)
+		// NRF_ERROR_NO_MEM may be global (data pool) or per connection
+		// give other peers a chance to get the notification
+		if(err_code == NRF_ERROR_NO_MEM) {
+			no_mem_occurred = true;
+			continue;
+		}
+
+		if(err_code != NRF_SUCCESS) {
 			return err_code;
+		}
 	}
 
+	if(no_mem_occurred) {
+		return NRF_ERROR_NO_MEM;
+	}
 	return NRF_SUCCESS;
 }
 
 ret_code_t ble_ftms_status_send(ble_ftms_t *const p_ftms, ble_ftms_status_t status)
 {
 	ASSERT(p_ftms);
+
+	ret_code_t err_code;
+	bool no_mem_occurred = false;
 
 	uint8_t buff[2] = {0};
 	uint8_t packet_len;
@@ -322,12 +337,23 @@ ret_code_t ble_ftms_status_send(ble_ftms_t *const p_ftms, ble_ftms_status_t stat
 		}
 
 		gq_req.params.gatts_hvx.p_len = &len_buff[conn_handle];
-		ret_code_t err_code = nrf_ble_gq_item_add(p_ftms->p_gatt_queue, &gq_req, conn_handle);
+		err_code = nrf_ble_gq_item_add(p_ftms->p_gatt_queue, &gq_req, conn_handle);
 
-		if(err_code != NRF_SUCCESS)
+		// NRF_ERROR_NO_MEM may be global (data pool) or per connection
+		// give other peers a chance to get the notification
+		if(err_code == NRF_ERROR_NO_MEM) {
+			no_mem_occurred = true;
+			continue;
+		}
+
+		if(err_code != NRF_SUCCESS) {
 			return err_code;
+		}
 	}
 
+	if(no_mem_occurred) {
+		return NRF_ERROR_NO_MEM;
+	}
 	return NRF_SUCCESS;
 }
 

@@ -43,6 +43,7 @@ ret_code_t ble_bas_update(ble_bas_t *const p_bas, const uint8_t battery_level_pc
 	ASSERT(p_bas);
 
 	ret_code_t err_code;
+	bool no_mem_occurred = false;
 
 	ble_gatts_value_t gatts_value = {0};
 
@@ -83,11 +84,21 @@ ret_code_t ble_bas_update(ble_bas_t *const p_bas, const uint8_t battery_level_pc
 		gq_req.params.gatts_hvx.p_len = &len_buff[conn_handle];
 		err_code = nrf_ble_gq_item_add(p_bas->p_gatt_queue, &gq_req, conn_handle);
 
+		// NRF_ERROR_NO_MEM may be global (data pool) or per connection
+		// give other peers a chance to get the notification
+		if(err_code == NRF_ERROR_NO_MEM) {
+			no_mem_occurred = true;
+			continue;
+		}
+
 		if(err_code != NRF_SUCCESS) {
 			return err_code;
 		}
 	}
 
+	if(no_mem_occurred) {
+		return NRF_ERROR_NO_MEM;
+	}
 	return NRF_SUCCESS;
 }
 

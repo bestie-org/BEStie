@@ -119,6 +119,7 @@ ret_code_t ble_cpms_update(ble_cpms_t *const p_cpms, const ble_cpms_data_t *cons
 	ASSERT(p_data);
 
 	ret_code_t err_code;
+	bool no_mem_occurred = false;
 
 	if(p_data->speed_present && !(p_cpms->features & BLE_CPMS_FEATURE_WHEEL_REVOLUTION_DATA_BIT)) {
 		return NRF_ERROR_INVALID_FLAGS;
@@ -158,10 +159,21 @@ ret_code_t ble_cpms_update(ble_cpms_t *const p_cpms, const ble_cpms_data_t *cons
 		gq_req.params.gatts_hvx.p_len = &len_buff[conn_handle];
 		err_code = nrf_ble_gq_item_add(p_cpms->p_gatt_queue, &gq_req, conn_handle);
 
-		if(err_code != NRF_SUCCESS)
+		// NRF_ERROR_NO_MEM may be global (data pool) or per connection
+		// give other peers a chance to get the notification
+		if(err_code == NRF_ERROR_NO_MEM) {
+			no_mem_occurred = true;
+			continue;
+		}
+
+		if(err_code != NRF_SUCCESS) {
 			return err_code;
+		}
 	}
 
+	if(no_mem_occurred) {
+		return NRF_ERROR_NO_MEM;
+	}
 	return NRF_SUCCESS;
 }
 
