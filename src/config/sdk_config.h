@@ -3906,8 +3906,14 @@
 // <e> NRFX_SAADC_ENABLED - nrfx_saadc - SAADC peripheral driver
 //==========================================================
 #ifndef NRFX_SAADC_ENABLED
-#define NRFX_SAADC_ENABLED 0
+#define NRFX_SAADC_ENABLED 1
 #endif
+
+// <e> NRFX_SAADC_API_V2 Use v2 of SAADC library
+#ifndef NRFX_SAADC_API_V2
+#define NRFX_SAADC_API_V2 1
+#endif
+
 // <o> NRFX_SAADC_CONFIG_RESOLUTION  - Resolution
 
 // <0=> 8 bit
@@ -3916,7 +3922,7 @@
 // <3=> 14 bit
 
 #ifndef NRFX_SAADC_CONFIG_RESOLUTION
-#define NRFX_SAADC_CONFIG_RESOLUTION 1
+#define NRFX_SAADC_CONFIG_RESOLUTION 2
 #endif
 
 // <o> NRFX_SAADC_CONFIG_OVERSAMPLE  - Sample period
@@ -3938,7 +3944,7 @@
 // <q> NRFX_SAADC_CONFIG_LP_MODE  - Enabling low power mode
 
 #ifndef NRFX_SAADC_CONFIG_LP_MODE
-#define NRFX_SAADC_CONFIG_LP_MODE 0
+#define NRFX_SAADC_CONFIG_LP_MODE 1
 #endif
 
 // <o> NRFX_SAADC_CONFIG_IRQ_PRIORITY  - Interrupt priority
