@@ -19,58 +19,39 @@
 #include "nrf_log.h"
 NRF_LOG_MODULE_REGISTER();
 
-/**
- * Allocate memory to service GATT queues
- *
- * LDI client is the only spot where we need to be smart.
- *
- * ldi_gatt_queue is used to handle incoming LDI notification that is huge
- *
- * but it's also used for connection setup so it needs to handle a few (1-2)
- * incoming notifications that are COM_BOSCH_EBIKE_EBIKE_LIVE_DATA_PB_H_MAX_SIZE long
- * (70 bytes in initial LDI spec) and a lot of smaller ones
- *
- * for that reason element pool size will be the size of standard ATT MTU - 23 bytes
- * but there will be enough elements to allocate into 3 LDI notifications
- * so 3*70 bytes of space split into 10 chunks 23 bytes each
- */
-NRF_BLE_GQ_CUSTOM_DEF(ldi_gatt_queue_inst, NRF_SDH_BLE_PERIPHERAL_LINK_COUNT, /* _max_connections */
-					  NRF_SDH_BLE_PERIPHERAL_LINK_COUNT * 3,				  /* _queue_size */
-					  BLE_GATT_ATT_MTU_DEFAULT,								  /* _pool_elem_size */
-					  NRF_SDH_BLE_PERIPHERAL_LINK_COUNT *(
-						  COM_BOSCH_EBIKE_EBIKE_LIVE_DATA_PB_H_MAX_SIZE / BLE_GATT_ATT_MTU_DEFAULT + 1) /* _pool_elem_count */
-);
-
-BLE_DB_DISCOVERY_ARRAY_DEF(db_disc_inst, NRF_SDH_BLE_PERIPHERAL_LINK_COUNT);
-BLE_LDI_C_ARRAY_DEF(ldi_inst, NRF_SDH_BLE_PERIPHERAL_LINK_COUNT);
-
-/* For the rest of services we're only sending notifications so math is simple:
+/* Allocate memory to service GATT queues
  *
  * mempool size: ATT MTU size
  * mempool element count should be: max number of peripheral connections * max number of outgoing notifications * number of ATT
  * MTU long chunks that fit the longest notification for this service
  */
-#define SERVICE_GQ_DEF(_name, _max_notif_count_per_connection, _max_notif_len)                                          \
-	NRF_BLE_GQ_CUSTOM_DEF(_name, NRF_SDH_BLE_PERIPHERAL_LINK_COUNT,								 /* _max_connections */ \
-						  (_max_notif_count_per_connection * NRF_SDH_BLE_PERIPHERAL_LINK_COUNT), /* _queue_size */      \
-						  BLE_GATT_ATT_MTU_DEFAULT,												 /* _pool_elem_size */  \
-						  NRF_SDH_BLE_PERIPHERAL_LINK_COUNT * _max_notif_count_per_connection *                         \
-							  (_max_notif_len / BLE_GATT_ATT_MTU_DEFAULT + 1) /* _pool_elem_count */                    \
+#define SERVICE_GQ_DEF(_name, _max_notif_count_per_connection, _max_notif_len)                       \
+	NRF_BLE_GQ_CUSTOM_DEF(_name, NRF_SDH_BLE_PERIPHERAL_LINK_COUNT, /* _max_connections */           \
+						  _max_notif_count_per_connection,			/* _queue_size */                \
+						  BLE_GATT_ATT_MTU_DEFAULT,					/* _pool_elem_size */            \
+						  NRF_SDH_BLE_PERIPHERAL_LINK_COUNT * _max_notif_count_per_connection *      \
+							  (_max_notif_len / BLE_GATT_ATT_MTU_DEFAULT + 1) /* _pool_elem_count */ \
 	)
+
+SERVICE_GQ_DEF(ldi_gatt_queue_inst, 3,
+			   (BLE_GATT_ATT_MTU_DEFAULT - 1)); // len < BLE_GATT_ATT_MTU_DEFAULT allocates single pool element per connection
+
+BLE_DB_DISCOVERY_ARRAY_DEF(db_disc_inst, NRF_SDH_BLE_PERIPHERAL_LINK_COUNT);
+BLE_LDI_C_ARRAY_DEF(ldi_inst, NRF_SDH_BLE_PERIPHERAL_LINK_COUNT);
 
 #if defined(CFG_CPMS_CSC_ENABLED) && CFG_CPMS_CSC_ENABLED
 
-SERVICE_GQ_DEF(cpms_gatt_queue_inst, 2, BLE_CPMS_MAX_SC_MEAS_LEN);
+SERVICE_GQ_DEF(cpms_gatt_queue_inst, 3, BLE_CPMS_MAX_SC_MEAS_LEN);
 BLE_CPMS_DEF(cpms_inst);
 
-SERVICE_GQ_DEF(csc_gatt_queue_inst, 2, BLE_CSC_MAX_SC_MEAS_LEN);
+SERVICE_GQ_DEF(csc_gatt_queue_inst, 3, BLE_CSC_MAX_SC_MEAS_LEN);
 BLE_CSC_DEF(csc_inst);
 
 #endif // #if defined(CFG_CPMS_CSC_ENABLED) && CFG_CPMS_CSC_ENABLED
 
 #if defined(CFG_FTMS_ENABLED) && CFG_FTMS_ENABLED
 
-SERVICE_GQ_DEF(ftms_gatt_queue_inst, 6, BLE_FTMS_MAX_INDOOR_BIKE_DATA_LEN);
+SERVICE_GQ_DEF(ftms_gatt_queue_inst, 8, BLE_FTMS_MAX_INDOOR_BIKE_DATA_LEN);
 BLE_FTMS_DEF(ftms_inst);
 
 #endif // #if defined(CFG_FTMS_ENABLED) && CFG_FTMS_ENABLED
