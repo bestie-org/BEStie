@@ -177,14 +177,13 @@ In case of doing bootloader update you can proceed regardless.
 	<video src="https://github.com/user-attachments/assets/885ea862-84bc-48cb-891e-cf43fd68cbda" width="640" controls></video>
 </div>
 
-1. Get BEStie firmware .hex from [release page](https://github.com/bestie-org/BEStie/releases/latest). 
-   File should be named as follows:
+1. Get BEStie firmware .hex from [release page](https://github.com/bestie-org/BEStie/releases/latest):
    | Board | Firmware file |
    |-------|-------|
-   | nRF52-DK / generic nRF52832 board powered from coin cell| `bestie_nrf52832_generic.hex` |
-   | nRF52840-DK / generic nRF52840 board powered from coin cell| `bestie_nrf52840_generic.hex` |
-   | Adafruit Feather family (Express, Sense, BLE) | `bestie_nrf52840_feather.hex` |
-   | Seed Studio Xiao family (BLE, BLE Sense) | `bestie_nrf52840_xiao.hex` |
+   | nRF52-DK / generic nRF52832 board powered from coin cell| [bestie_nrf52832_generic.hex](https://github.com/bestie-org/BEStie/releases/download/v0.2/bestie_nrf52832_generic.hex) |
+   | nRF52840-DK / generic nRF52840 board powered from coin cell|  [bestie_nrf52840_generic.hex](https://github.com/bestie-org/BEStie/releases/download/v0.2/bestie_nrf52840_generic.hex) |
+   | Adafruit Feather family (Express, Sense, BLE) |  [bestie_nrf52840_feather.hex](https://github.com/bestie-org/BEStie/releases/download/v0.2/bestie_nrf52840_feather.hex) |
+   | Seed Studio Xiao family (BLE, BLE Sense) |  [bestie_nrf52840_xiao.hex](https://github.com/bestie-org/BEStie/releases/download/v0.2/bestie_nrf52840_xiao.hex) |
 2. Verify that the board is still in bootloader mode (there's a USB drive with `INFO_UF2.TXT` file as described above). Bootloader access times out after few minutes of inactivity
 3. Go to [BEStie firmware uploader](https://bestie-org.github.io/adafruit-uploader/) page. You'll need a browser that supports WebSerial API (Chromium or recent release of Firefox)
 4. Click 'Connect Serial' button. 
