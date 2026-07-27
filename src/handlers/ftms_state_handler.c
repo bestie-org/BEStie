@@ -18,7 +18,14 @@ NRF_LOG_MODULE_REGISTER();
 #define CFG_FTMS_HANDLER_IDLE_NOTIFICATION_INTERVAL_MS 1000
 #endif
 
+// how long to wait before publishing 'bike not driving' signal
+// this is very noisy data source combining accelerometer (bike bumped but not moved), speed and cadence
+#ifndef CFG_FTMS_BIKE_STATIONARY_DEBOUNCE_TIMER_INTERVAL_MS
+#define CFG_FTMS_BIKE_STATIONARY_DEBOUNCE_TIMER_INTERVAL_MS 3000
+#endif
+
 APP_TIMER_DEF(ftms_notification_timer);
+APP_TIMER_DEF(ftms_bike_stationary_debounce_timer);
 
 static bool ftms_cadence_updated = false;
 static bool ftms_power_updated = false;
@@ -62,6 +69,13 @@ static void on_initial_data_read(const ebike_state_data_t *const p_ebike_state_d
 
 	err_code = app_timer_start(ftms_notification_timer, APP_TIMER_TICKS(CFG_FTMS_HANDLER_NOTIFICATION_TIMER_INTERVAL_MS), NULL);
 	APP_ERROR_CHECK(err_code);
+
+	// presume bike stationary change
+	if(p_ebike_state->has_bike_not_driving) {
+		err_code = app_timer_start(ftms_bike_stationary_debounce_timer,
+								   APP_TIMER_TICKS(CFG_FTMS_BIKE_STATIONARY_DEBOUNCE_TIMER_INTERVAL_MS), NULL);
+		APP_ERROR_CHECK(err_code);
+	}
 }
 
 static void on_live_data_notification(const ebike_state_data_t *const p_ebike_state_data)
@@ -114,6 +128,15 @@ static void on_live_data_notification(const ebike_state_data_t *const p_ebike_st
 	if(p_incoming_msg->has_cadence && p_incoming_msg->cadence > 0) {
 		ftms_cadence_sum += (uint64_t)p_incoming_msg->cadence;
 		ftms_cadence_sample_count++;
+	}
+
+	if(EBIKE_STATE_HAS_PARAM_CHANGED(bike_not_driving, p_previous_ebike_state, p_incoming_msg)) {
+		// ignore invalid state of stopping timer that has not been started
+		app_timer_stop(ftms_bike_stationary_debounce_timer);
+
+		err_code = app_timer_start(ftms_bike_stationary_debounce_timer,
+								   APP_TIMER_TICKS(CFG_FTMS_BIKE_STATIONARY_DEBOUNCE_TIMER_INTERVAL_MS), NULL);
+		APP_ERROR_CHECK(err_code);
 	}
 }
 
@@ -190,7 +213,27 @@ static void ftms_ebike_event_handler(const ebike_state_data_t *const p_ebike_sta
 		break;
 	case EBIKE_STATE_DISCONNECTED:
 		app_timer_stop(ftms_notification_timer);
+		app_timer_stop(ftms_bike_stationary_debounce_timer);
 		break;
+	}
+}
+
+static void ftms_bike_stationary_debounce_timer_handler(void *p_ctx)
+{
+	if(!ebike_is_connected()) {
+		return;
+	}
+
+	const ble_ldi_t *const p_ebike_state = ebike_state_get();
+
+	ble_ftms_status_t status = (p_ebike_state->has_bike_not_driving && p_ebike_state->bike_not_driving) ? BLE_FTMS_STATUS_PAUSED
+																										: BLE_FTMS_STATUS_RESUMED;
+
+	ret_code_t err_code = ble_ftms_status_send(services_ftms_inst_get(), status);
+	if(err_code == NRF_ERROR_NO_MEM) {
+		NRF_LOG_WARNING("FTMS queue out of space");
+	} else {
+		APP_ERROR_CHECK(err_code);
 	}
 }
 
@@ -199,6 +242,10 @@ void ftms_state_handler_init(void)
 	ret_code_t err_code;
 
 	err_code = app_timer_create(&ftms_notification_timer, APP_TIMER_MODE_REPEATED, ftms_notification_timer_handler);
+	APP_ERROR_CHECK(err_code);
+
+	err_code = app_timer_create(&ftms_bike_stationary_debounce_timer, APP_TIMER_MODE_SINGLE_SHOT,
+								ftms_bike_stationary_debounce_timer_handler);
 	APP_ERROR_CHECK(err_code);
 
 	err_code = ebike_state_register_handler(ftms_ebike_event_handler);
