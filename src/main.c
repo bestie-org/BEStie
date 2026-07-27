@@ -2,12 +2,13 @@
 #include "app_scheduler.h"
 #include "app_util_platform.h"
 #include "ble_init.h"
-#include "board_init.h"
+#include "bsp.h"
 #include "nrf_ble_lesc.h"
 #include "nrf_log.h"
 #include "nrf_log_ctrl.h"
 #include "nrf_pwr_mgmt.h"
 #include "services.h"
+#include "system_init.h"
 
 static void idle_task(void)
 {
@@ -33,7 +34,8 @@ static void idle_task(void)
 
 int main(void)
 {
-	board_init();
+	system_init();
+	bsp_init();
 	ble_init();
 	services_init();
 	advertising_init();

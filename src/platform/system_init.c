@@ -1,4 +1,4 @@
-#include "board_init.h"
+#include "system_init.h"
 #include "app_scheduler.h"
 #include "app_timer.h"
 #include "nrf_log.h"
@@ -43,7 +43,7 @@ static void init_stack_guard(void)
 	APP_ERROR_CHECK(err_code);
 }
 
-void board_init(void)
+void system_init(void)
 {
 	init_log();
 	init_scheduler();

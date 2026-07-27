@@ -4,14 +4,14 @@
 #
 # ================================================
 
-TARGETS          := bestie_nrf52832 bestie_nrf52840
+TARGETS          := bestie_nrf52832_generic bestie_nrf52840_generic bestie_nrf52840_feather bestie_nrf52840_xiao
 OUTPUT_DIRECTORY ?= build
 
 # build and board selection handling
 
 # list of supported values
 SUPPORTED_BUILDS := debug release size size_debug
-SUPPORTED_BOARDS := nrf52832dk nrf52840dk
+SUPPORTED_BOARDS := nrf52832dk nrf52840dk nrf52840-feather nrf52840-xiao
 
 # defaults
 DEFAULT_BUILD := debug
@@ -63,18 +63,34 @@ endif
 
 # nrf52832dk
 ifeq ($(BOARD),nrf52832dk)
-	COMMON_FLAGS += -DBES_BOARD_NRF52_DK=1
+	COMMON_FLAGS += -DBES_BOARD_NRF52_DK=1 -DBES_BSP_GENERIC=1
 
 	# set MCU
-	.DEFAULT_GOAL := bestie_nrf52832
+	.DEFAULT_GOAL := bestie_nrf52832_generic
 	.MCU:=nrf52832
 
 # nrf52840dk
 else ifeq ($(BOARD),nrf52840dk)
-	COMMON_FLAGS += -DBES_BOARD_NRF52840_DK=1
+	COMMON_FLAGS += -DBES_BOARD_NRF52840_DK=1 -DBES_BSP_GENERIC=1
 
 	# set MCU
-	.DEFAULT_GOAL := bestie_nrf52840
+	.DEFAULT_GOAL := bestie_nrf52840_generic
+	.MCU:=nrf52840
+
+# Adafruit Feather 52840
+else ifeq ($(BOARD),nrf52840-feather)
+	COMMON_FLAGS += -DBES_BOARD_NRF52840_FEATHER=1 -DBES_BSP_FEATHER=1
+
+	# set MCU
+	.DEFAULT_GOAL := bestie_nrf52840_feather
+	.MCU:=nrf52840
+
+# Seed Studio Xiao BLE
+else ifeq ($(BOARD),nrf52840-xiao)
+	COMMON_FLAGS += -DBES_BOARD_NRF52840_XIAO=1 -DBES_BSP_XIAO=1
+
+	# set MCU
+	.DEFAULT_GOAL := bestie_nrf52840_xiao
 	.MCU:=nrf52840
 
 # unknown board

@@ -32,7 +32,9 @@
 				"__HEAP_SIZE=0",
 				"__STACK_SIZE=8192",
 				"DEBUG=1",
-				"DEBUG_NRF_USER=1"
+				"DEBUG_NRF_USER=1",
+				"NRFX_SAADC_API_V2=1",
+				"BES_BSP_GENERIC=1"
             ],
             "browse": {
                 "limitSymbolsToIncludedHeaders": true,
