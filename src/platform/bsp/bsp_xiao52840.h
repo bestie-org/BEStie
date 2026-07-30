@@ -22,6 +22,9 @@
 #define BSP_BATT_BEFORE_GET_SOC() bsp_xiao_before_get_soc()
 #define BSP_BATT_AFTER_GET_SOC()  bsp_xiao_after_get_soc()
 
+#define BSP_UART_TX BSP_GPIO_PIN_MAP(1,11)
+#define BSP_UART_RX BSP_GPIO_PIN_MAP(1,12)
+
 void bsp_xiao_before_get_soc(void);
 void bsp_xiao_after_get_soc(void);
 

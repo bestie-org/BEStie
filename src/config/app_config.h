@@ -6,6 +6,8 @@
 #ifndef __APP_CONFIG_H__
 #define __APP_CONFIG_H__
 
+#include "bsp_internal.h"
+
 // <<< Use Configuration Wizard in Context Menu >>>\n
 
 // <h> Application scheduler

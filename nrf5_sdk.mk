@@ -221,6 +221,22 @@ LDFLAGS += --specs=nano.specs
 # Enable float support for printf()
 # LDFLAGS += -u _printf_float
 
+# detect if NRF_LOG uses UART and add missing files
+
+# set in sdk_config.h
+SDK_CONFIG_FILE := $(PROJ_DIR)/src/config/sdk_config.h
+NRF_LOG_USES_UART_IN_SDK_CONFIG := $(shell printf '#include "$(SDK_CONFIG_FILE)"\n#if NRF_LOG_BACKEND_UART_ENABLED == 1\nFOUND\n#endif' | gcc -E -P - | grep -q FOUND && echo "1" || echo "0")
+
+# invoked as: CFLAGS="-DNRF_LOG_BACKEND_UART_ENABLED=1" make
+NRF_LOG_USES_UART_IN_CFLAGS := $(if $(filter -DNRF_LOG_BACKEND_UART_ENABLED=1,$(CFLAGS)),1,0)
+
+NRF_LOG_USES_UART := $(or $(filter 1,$(NRF_LOG_USES_UART_IN_SDK_CONFIG)),$(NRF_LOG_USES_UART_IN_CFLAGS))
+
+ifeq ($(NRF_LOG_USES_UART),1)
+    $(info NRF_LOG uses UART backend, do not use in production builds)
+	NRF_SDK_MODULES += nrfx_uarte nrf_drv_uart
+endif
+
 # Target files definition
 
 # list of files excluded form nRF5 SDK compilation in Makefile wildcard format
