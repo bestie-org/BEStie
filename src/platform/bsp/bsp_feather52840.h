@@ -15,8 +15,8 @@
 #define BSP_BATT_VOLTAGE_MIN   3.0f
 #define BSP_BATT_VOLTAGE_MAX   4.2f
 
-#define BSP_UART_TX BSP_GPIO_PIN_MAP(0,25)
-#define BSP_UART_RX BSP_GPIO_PIN_MAP(0,24)
+#define BSP_UART_TX			   BSP_GPIO_PIN_MAP(0, 25)
+#define BSP_UART_RX			   BSP_GPIO_PIN_MAP(0, 24)
 
 // 1M/1M divider
 #define BSP_BATT_VOLTAGE_SCALE 2.0f
