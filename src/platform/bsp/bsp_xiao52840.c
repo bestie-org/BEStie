@@ -12,9 +12,7 @@
 #define PIN_BATT_VOLTAGE_DIVIDER_INACTIVE 1
 
 // pin that controls battery charging current
-#define PIN_CHARGING_CURRENT	  NRF_GPIO_PIN_MAP(0, 13)
-#define PIN_CHARGING_CURRENT_SLOW 1 // 50mA current
-#define PIN_CHARGING_CURRENT_FAST 0 // 100mA current
+#define PIN_CHARGING_CURRENT NRF_GPIO_PIN_MAP(0, 13)
 
 void bsp_board_init(void)
 {
@@ -24,8 +22,20 @@ void bsp_board_init(void)
 	nrf_gpio_pin_write(PIN_BATT_VOLTAGE_DIVIDER, PIN_BATT_VOLTAGE_DIVIDER_INACTIVE);
 
 	// set slow charging, this is the safer option
-	nrf_gpio_cfg_output(PIN_CHARGING_CURRENT);
-	nrf_gpio_pin_write(PIN_CHARGING_CURRENT, PIN_CHARGING_CURRENT_SLOW);
+
+	/**
+	 * Xiao BLE wiki does not match schematics
+	 * setting charging current pin P0.13 high as described here: https://wiki.seeedstudio.com/XIAO_BLE/#battery-charging-current
+	 * causes charging process to never complete.
+	 *
+	 * Comparing resistance values with BQ25100 design reference (DS chapter 9.2.2.1.1 'Program the Fast Charge Current, ISET')
+	 * using schematics and disregarding code on wiki:
+	 * * P0.13 not connected to nRF crossbar == 2.7kOhm on ISET == 50mA current
+	 * * P0.13 low == two 2.7kOhm resistors in parallel to ground == 100mA current
+	 *
+	 * this seems to align with behavior seen in the wild
+	 */
+	nrf_gpio_cfg_default(PIN_CHARGING_CURRENT); // this disconnects P0.13 from nRF GPIO crossbar regardless of previous state
 }
 
 void bsp_xiao_before_get_soc(void)
