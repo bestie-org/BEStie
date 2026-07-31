@@ -13,7 +13,7 @@
 
 #define BSP_BATT_SAADC_CHANNEL NRF_SAADC_INPUT_AIN7
 #define BSP_BATT_VOLTAGE_MIN   3.0f
-#define BSP_BATT_VOLTAGE_MAX   4.2f
+#define BSP_BATT_VOLTAGE_MAX   4.10f
 
 // 510K/1M divider according to the schematics
 #define BSP_BATT_VOLTAGE_SCALE (1510000.0f/510000.0f)
